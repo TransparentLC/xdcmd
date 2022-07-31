@@ -1,0 +1,4 @@
+beautifulsoup4 == 4.*
+lxml == 4.*
+prompt-toolkit == 3.*
+requests == 2.*
