@@ -38,14 +38,15 @@ from prompt_toolkit.widgets import TextArea
 BASE_PATH: str = os.path.realpath(sys._MEIPASS if hasattr(sys, '_MEIPASS') else '')
 APP_PATH = os.path.dirname(os.path.realpath(sys.executable if hasattr(sys, '_MEIPASS') else sys.argv[0]))
 
-config = configparser.RawConfigParser({
+config = configparser.RawConfigParser()
+config['DEFAULT'] = {
     'CDNPath': '',
     'Cookie': '',
     'Monochrome': False,
     'ImagePreview': True,
     'ImagePreviewWidth': 24,
     'ImagePreviewHeight': 6,
-})
+}
 config['Config'] = {}
 config.read(os.path.join(APP_PATH, 'config.ini'))
 if config['Config'].get('CDNPath'):
