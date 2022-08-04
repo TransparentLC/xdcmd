@@ -13,11 +13,7 @@ from urllib.parse import urljoin
 
 try:
     import orjson
-    def jsonRewrite(self: requests.Response, **kwargs):
-        if not hasattr(self, 'jsonCache'):
-            setattr(self, 'jsonCache', orjson.loads(self.content))
-        return self.jsonCache
-    __import__('requests.models').Response.json = jsonRewrite
+    __import__('requests.models').Response.json = functools.cache(lambda self, **kwargs: orjson.loads(self.content))
 except ImportError:
     pass
 

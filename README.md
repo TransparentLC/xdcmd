@@ -2,11 +2,13 @@
 
 [X 岛匿名版](https://nmbxd.com/)命令行客户端。
 
+用户反馈和技术支持集中串：[No.50750950](https://nmbxd.com/t/50750950)
+
 ![](https://user-images.githubusercontent.com/47057319/182030427-6c75ec92-f808-4cbc-8102-2c868db33093.png)
 
 ## 基本介绍
 
-“在命令行的环境下重现 X 岛网页版的刷岛体验”，原本只是这么一个很简单的想法，在做出初步的原型然后发到岛上之后意外地[很受肥肥们的欢迎](https://nmbxd.com/t/50750950)，于是就继续把完整版做出来了 (\*´ω`\*)
+“在命令行的环境下重现 X 岛网页版的刷岛体验”，原本只是这么一个很简单的想法，在做出初步的原型然后发到岛上之后意外地很受肥肥们的欢迎，于是就继续把完整版做出来了 (\*´ω`\*)
 
 <details>
 
@@ -28,13 +30,13 @@
 
 不管怎么说，在命令行里刷岛这件事本身已经非常炫酷了 ᕕ( ᐛ )ᕗ
 
-* 执行 `python main.py` 就可以启动了，在此之前不要忘了 `pip install -r requirements.txt`。
-* 开发时使用的是 Python 3.10，使用更低的大版本也可能可以运行，不过我没有测试过。
+* 执行 `python main.py` 就可以启动了，在此之前不要忘了 `pip install -r requirements.txt`，需要使用 Python 3.10 或以上的版本。
+* 如果你是 Arch Linux 用户，也可以使用 `yay -S xdao` 安装，之后在终端输入 `xdao` 就可以启动了。感谢饼干为“ygaCgTJ”的肥肥提供打包～(ノﾟ∀ﾟ)ノ
 * 建议搭配等宽字体使用。对于 Windows 用户，建议通过 [Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701) 使用这个客户端，在传统的终端下使用可能会存在一些问题。
 
 ## 配置文件
 
-在第一次按 <kbd>Alt+E</kbd> 正常退出后，会在 `main.py` 所在的目录下写入配置文件 `config.ini`，内容如下：
+在第一次按 <kbd>Alt+E</kbd> 正常退出后，会在 `main.py` 所在的目录下写入配置文件 `config.ini`（如果使用 AUR 包安装，则路径为 `/usr/share/xdao/config.ini`），配置文件的内容如下：
 
 ```ini
 [Config]
@@ -51,6 +53,7 @@ monochrome = False
 # 显示缩略图
 # 此功能依赖于chafa（https://hpjansson.org/chafa/），需要自行使用包管理器安装，或下载可执行文件并放在PATH环境变量包含的路径下
 # 在单色模式下也不会显示缩略图
+# 需要额外的时间加载图片，如果介意拖慢速度的话可以关闭此功能
 imagepreview = True
 # 缩略图的最大宽度
 imagepreviewwidth = 24

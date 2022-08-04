@@ -77,13 +77,97 @@ EMOTICON = (
     "(　ˇωˇ )◕∀◕｡)^ω^)",
 )
 EMOTICON_MULTILINE = {
-    'F5欧拉': "　σ　σ\nσ(　´ρ`)σ[F5]\n　σ　σ",
-    '白羊': "╭◜◝ ͡ ◜◝ J J\n(　　　　 `д´) 　“咩！”\n╰◟д ◞ ͜ ◟д◞",
-    '举高高': "　　　　_∧＿∧_ 　　　　\n            ((∀｀/ 　) 　　\n　       /⌒　　 ／ 　　\n         /(__ノ＼_ノ 　　\n          (_ノ ||| 举高高~~\n　∧＿∧　∧＿∧\n (( ・∀・ ))・∀・) )\n `＼　　 ∧ 　　ノ\n　/　｜/　　｜\n（＿ノ＿)_ノL＿)",
-    '举糕糕': "举糕糕~\n　　☆☆☆☆☆☆☆☆\n 　╭┻┻┻┻┻┻┻┻╮\n 　┃╱╲╱╲╱╲╱╲┃\n ╭┻━━━━━━━━┻╮\n ┃╱╲╱╲╱╲╱╲╱╲┃\n ┗━━━━━━━━━━┛\n 　　　∧＿∧　∧＿∧\n　　(( ・∀・ ))・∀・) )\n 　　`＼　　 ∧ 　　ノ\n　　　/　　｜/　　｜\n 　　（＿ノ＿)_ノL＿)",
-    '大嘘': "吁~~~~　　rnm，退钱！\n 　　　/　　　/\n(　ﾟ 3ﾟ) `ー´) `д´) `д´)",
-    '催更喵': "　　　　　／＞　　フ\n　　　　　|  　_　 _ l 我是一只催更的\n　 　　　／` ミ＿xノ 喵喵酱\n　　 　 /　　　 　 | gkdgkd\n　　　 /　 ヽ　　 ﾉ\n　 　 │　　|　|　|\n　／￣|　　 |　|　|\n　| (￣ヽ＿_ヽ_)__)\n　＼二つ ",
-    '巴拉巴拉': "    ∧＿∧\n （｡･ω･｡)つ━☆・*。\n ⊂　　 ノ 　　　・゜+.\n　しーＪ　　　°。+ *´¨)\n　　　 　　.· ´¸.·*´¨) ¸.·*¨)\n　　　　　　　 　(¸.·´ (¸.·’*",
+    'F5欧拉': (
+        "　σ　σ\n"
+        "σ(　´ρ`)σ[F5]\n"
+        "　σ　σ"
+    ),
+    '白羊': (
+        "╭◜◝ ͡ ◜◝ J J\n"
+        "(　　　　 `д´) 　“咩！”\n"
+        "╰◟д ◞ ͜ ◟д◞"
+    ),
+    '举高高': (
+        "　　　　_∧＿∧_ 　　　　\n"
+        "            ((∀｀/ 　) 　　\n"
+        "　       /⌒　　 ／ 　　\n"
+        "         /(__ノ＼_ノ 　　\n"
+        "          (_ノ ||| 举高高~~\n"
+        "　∧＿∧　∧＿∧\n"
+        " (( ・∀・ ))・∀・) )\n"
+        " `＼　　 ∧ 　　ノ\n"
+        "　/　｜/　　｜\n"
+        "（＿ノ＿)_ノL＿)"
+    ),
+    '举糕糕': (
+        "举糕糕~\n"
+        "　　☆☆☆☆☆☆☆☆\n"
+        " 　╭┻┻┻┻┻┻┻┻╮\n"
+        " 　┃╱╲╱╲╱╲╱╲┃\n"
+        " ╭┻━━━━━━━━┻╮\n"
+        " ┃╱╲╱╲╱╲╱╲╱╲┃\n"
+        " ┗━━━━━━━━━━┛\n"
+        " 　　　∧＿∧　∧＿∧\n"
+        "　　(( ・∀・ ))・∀・) )\n"
+        " 　　`＼　　 ∧ 　　ノ\n"
+        "　　　/　　｜/　　｜\n"
+        " 　　（＿ノ＿)_ノL＿)"
+    ),
+    '大嘘': (
+        "吁~~~~　　rnm，退钱！\n"
+        " 　　　/　　　/\n"
+        "(　ﾟ 3ﾟ) `ー´) `д´) `д´)"
+    ),
+    '催更喵': (
+        "　　　　　／＞　　フ\n"
+        "　　　　　|  　_　 _ l 我是一只催更的\n"
+        "　 　　　／` ミ＿xノ 喵喵酱\n"
+        "　　 　 /　　　 　 | gkdgkd\n"
+        "　　　 /　 ヽ　　 ﾉ\n"
+        "　 　 │　　|　|　|\n"
+        "　／￣|　　 |　|　|\n"
+        "　| (￣ヽ＿_ヽ_)__)\n"
+        "　＼二つ "
+    ),
+    '巴拉巴拉': (
+        "    ∧＿∧\n"
+        " （｡･ω･｡)つ━☆・*。\n"
+        " ⊂　　 ノ 　　　・゜+.\n"
+        "　しーＪ　　　°。+ *´¨)\n"
+        "　　　 　　.· ´¸.·*´¨) ¸.·*¨)\n"
+        "　　　　　　　 　(¸.·´ (¸.·’*"
+    ),
+}
+
+replyCompleterWords = (
+    *EMOTICON,
+    *(f'${e}$' for e in EMOTICON_MULTILINE),
+    "接☆龙☆大☆成☆功", "[h][/h]", "[n,m]", "　", ">>No.",
+)
+replyCompleterMeta = {
+    "(　^ω^)": '阴阳酱',
+    "(　ˇωˇ)": '安详阴阳酱',
+    "(｡◕∀◕｡)": '小殇君',
+    "( ﾟ∀。)": '弱智酱',
+    "( ・_ゝ・)": '忧郁傻卵',
+    "(ノﾟ∀ﾟ)ノ": '举高高',
+    "( ´ρ`)": '口水酱',
+    "⊂彡☆))д`)": '左打脸',
+    "⊂彡☆))д´)": '左打脸',
+    "⊂彡☆))∀`)": '左打脸',
+    "(´∀((☆ミつ": '右打脸',
+    "ᕕ( ᐛ )ᕗ": '嗨呀',
+    "σ( ᑒ )": '喂我',
+    "(`ヮ´ )σ`∀´) ﾟ∀ﾟ)σ": '齐齐蛤尔',
+    "( ﾉд`ﾟ);´д`) ´_ゝ`)": '呼伦悲尔',
+    "Σ( ﾟдﾟ)´ﾟДﾟ)　ﾟдﾟ)))": '愕尔多厮',
+    "( ﾟ∀。)∀。)∀。)": '智利',
+    "(　ˇωˇ )◕∀◕｡)^ω^)": '阴山山脉',
+    **{f'${e}$': '大型颜文字' for e in EMOTICON_MULTILINE},
+    "[h][/h]": '防剧透',
+    "[n,m]": '骰子',
+    "　": '全角空格',
+    ">>No.": '引用',
 }
 
 forumGroups: list[xdnmb.model.ForumGroup] = []
@@ -138,39 +222,6 @@ replyTitleTextarea = TextArea(multiline=False)
 replyContentTextarea = TextArea(
     multiline=True,
     height=8,
-    completer=WordCompleter(
-        (
-            *EMOTICON,
-            *(f'${e}$' for e in EMOTICON_MULTILINE),
-            "接☆龙☆大☆成☆功", "[h][/h]", "[n,m]", ">>No.", "　",
-        ),
-        ignore_case=True,
-        meta_dict={
-            "(　^ω^)": '阴阳酱',
-            "(　ˇωˇ)": '安详阴阳酱',
-            "(｡◕∀◕｡)": '小殇君',
-            "( ﾟ∀。)": '弱智酱',
-            "( ・_ゝ・)": '忧郁傻卵',
-            "(ノﾟ∀ﾟ)ノ": '举高高',
-            "( ´ρ`)": '口水酱',
-            "⊂彡☆))д`)": '左打脸',
-            "⊂彡☆))д´)": '左打脸',
-            "⊂彡☆))∀`)": '左打脸',
-            "(´∀((☆ミつ": '右打脸',
-            "ᕕ( ᐛ )ᕗ": '嗨呀',
-            "σ( ᑒ )": '喂我',
-            "(`ヮ´ )σ`∀´) ﾟ∀ﾟ)σ": '齐齐蛤尔',
-            "( ﾉд`ﾟ);´д`) ´_ゝ`)": '呼伦悲尔',
-            "Σ( ﾟдﾟ)´ﾟДﾟ)　ﾟдﾟ)))": '愕尔多厮',
-            "( ﾟ∀。)∀。)∀。)": '智利',
-            "(　ˇωˇ )◕∀◕｡)^ω^)": '阴山山脉',
-            **{f'${e}$': '大型颜文字' for e in EMOTICON_MULTILINE},
-            "[h][/h]": '防剧透',
-            "[n,m]": '骰子',
-            ">>No.": '引用',
-            "　": '全角空格',
-        },
-    ),
 )
 replyImageTextarea = TextArea(multiline=False, completer=PathCompleter())
 replyWaterCheckbox = Checkbox('水印')
@@ -387,7 +438,7 @@ def _(e: KeyPressEvent):
         return
     def callback(s: str):
         try:
-            s = int(s)
+            s = int(s.strip())
             if s < 1 or s > thread.maxPage:
                 raise ValueError
         except ValueError:
@@ -400,7 +451,7 @@ def _(e: KeyPressEvent):
     @xdnmb.util.floatAlertExceptionCatch
     def callback(s: str):
         try:
-            s = int(s)
+            s = int(s.strip())
         except ValueError:
             return
         b = Button('确定')
@@ -418,7 +469,28 @@ def _(e: KeyPressEvent):
         container.floats.append(d)
         layout.focus(b.window)
 
-    xdnmb.util.floatPrompt('查看引用', f'请输入串号：\n（不需要输入 No.）', callback)
+    refw = set()
+    refm = {}
+    if thread:
+        refw.update(thread.references)
+        refm.update({str(k): f'被“{thread.summary(24)}”引用' for k in thread.references})
+        for r in thread.replies:
+            refw.update(r.references)
+            refm.update({str(k): f'被“{r.summary(24)}”引用' for k in r.references})
+    elif forum:
+        for t in forumThreads:
+            refw.update(t.references)
+            refm.update({str(k): f'被“{t.summary(24)}”引用' for k in t.references})
+    refw = list(refw)
+    refw.sort()
+    refw = list(str(x) for x in refw)
+
+    xdnmb.util.floatPrompt(
+        '查看引用',
+        f'请输入串号：\n（不需要输入 No.）',
+        callback,
+        WordCompleter(refw, meta_dict=refm),
+    )
 
 @keyBinding.add('escape', 'n')
 def _(e: KeyPressEvent):
@@ -428,6 +500,20 @@ def _(e: KeyPressEvent):
     showReplyForm = not showReplyForm
     forumContentControl.vertical_scroll = 0
     if showReplyForm:
+        cw = list(replyCompleterWords)
+        cm = replyCompleterMeta.copy()
+        if thread:
+            cw.append(f'>>No.{thread.tid}')
+            cm[f'>>No.{thread.tid}'] = f'引用：“{thread.summary(24)}”'
+            for r in thread.replies:
+                cw.append(f'>>No.{r.tid}')
+                cm[f'>>No.{r.tid}'] = f'引用：“{r.summary(24)}”'
+        elif forum:
+            for t in forumThreads:
+                cw.append(f'>>No.{t.tid}')
+                cm[f'>>No.{t.tid}'] = f'引用：“{t.summary(24)}”'
+
+        replyContentTextarea.completer = WordCompleter(cw, meta_dict=cm)
         replyNameTextarea.text = ''
         replyTitleTextarea.text = ''
         replyContentTextarea.text = ''

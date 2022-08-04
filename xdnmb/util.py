@@ -15,6 +15,8 @@ from bs4 import BeautifulSoup
 from bs4.element import Tag
 from bs4 import MarkupResemblesLocatorWarning
 
+from prompt_toolkit.completion import Completer
+from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.layout import Float
 from prompt_toolkit.layout import HSplit
 from prompt_toolkit.widgets import Button
@@ -62,9 +64,10 @@ def floatAlertExceptionCatch(func: typing.Callable):
             floatAlert('错误', f'{type(ex).__name__}: {ex}')
     return wrapper
 
-def floatPrompt(title: str, body: str, callback: typing.Callable[[str], None]):
+def floatPrompt(title: str, body: str, callback: typing.Callable[[str], None], completer: Completer|None = None):
     t = TextArea(
         multiline=False,
+        completer=completer,
     )
     b0 = Button('确定')
     b1 = Button('取消')

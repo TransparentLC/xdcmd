@@ -5,6 +5,7 @@ import functools
 import html
 import math
 import re
+import wcwidth
 import xdnmb.action
 
 from prompt_toolkit.formatted_text import ANSI
@@ -93,6 +94,28 @@ class Reply:
     content: str
     admin: bool
     isPo: bool
+
+    @functools.cached_property
+    def references(self) -> tuple[int, ...]:
+        return tuple(int(x) for x in re.findall(r'>>No\.(\d+)', self.content))
+
+    @functools.cached_property
+    def contentWithoutReferences(self) -> str:
+        return re.sub(r'>>No\.(\d+)\n?', '', self.content)
+
+    @functools.lru_cache(8)
+    def summary(self, length: int) -> str:
+        result = ''
+        for c in self.contentWithoutReferences:
+            w = wcwidth.wcwidth(c)
+            if w < 1:
+                continue
+            length -= w
+            if length < 0:
+                result += '...'
+                break
+            result += c
+        return result
 
     @functools.cache
     def __pt_container__(self) -> Container:

@@ -1,4 +1,3 @@
-import os
 import xdnmb.globals
 import xdnmb.action
 
@@ -33,5 +32,9 @@ Application(
         'form-label': 'bg:#eeaa88',
         'form-textarea': 'bg:#ffffff',
     }),
-    color_depth=ColorDepth.DEPTH_1_BIT if xdnmb.globals.config['Config'].getboolean('Monochrome') else ColorDepth.DEPTH_24_BIT,
+    color_depth=(
+        ColorDepth.DEPTH_1_BIT
+        if xdnmb.globals.config['Config'].getboolean('Monochrome') else
+        ColorDepth.DEPTH_24_BIT
+    ),
 ).run()
