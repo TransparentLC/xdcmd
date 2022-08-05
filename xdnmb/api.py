@@ -213,10 +213,16 @@ def postThread(
     elif isinstance(forumOrThread, xdnmb.model.Thread):
         f['resto'] = (None, forumOrThread.tid)
     if image:
+        if image in xdnmb.globals.STICKERS:
+            image = xdnmb.globals.STICKERS[image]
         f['image'] = (
-            secrets.token_urlsafe(12) + os.path.splitext(image)[1],
-            open(image, 'rb'),
-            mimetypes.guess_type(image)[0],
+            secrets.token_urlsafe(12) + os.path.splitext(image.split('?')[0])[1],
+            (
+                session.get(image, stream=True).raw
+                if image.startswith('https://') or image.startswith('http://') else
+                open(image, 'rb')
+            ),
+            mimetypes.guess_type(image.split('?')[0])[0],
         )
         if water:
             f['water'] = (None, 'true')

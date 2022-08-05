@@ -16,7 +16,6 @@ from bs4.element import Tag
 from bs4 import MarkupResemblesLocatorWarning
 
 from prompt_toolkit.completion import Completer
-from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.layout import Float
 from prompt_toolkit.layout import HSplit
 from prompt_toolkit.widgets import Button
