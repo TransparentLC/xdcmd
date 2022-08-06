@@ -1,5 +1,7 @@
 # xdcmd
 
+[![AUR version](https://img.shields.io/aur/version/xdao)](https://aur.archlinux.org/packages/xdao)
+
 [X 岛匿名版](https://nmbxd.com/)命令行客户端。
 
 用户反馈和技术支持集中串：[No.50750950](https://nmbxd.com/t/50750950)
@@ -31,7 +33,7 @@
 不管怎么说，在命令行里刷岛这件事本身已经非常炫酷了 ᕕ( ᐛ )ᕗ
 
 * 执行 `python main.py` 就可以启动了，在此之前不要忘了 `pip install -r requirements.txt`，需要使用 Python 3.10 或以上的版本。
-* 如果你是 Arch Linux 用户，也可以使用 `yay -S xdao` 安装，之后在终端输入 `xdao` 就可以启动了。感谢饼干为“ygaCgTJ”的肥肥提供打包～(ノﾟ∀ﾟ)ノ
+* 如果你是 Arch Linux 用户，也可以使用 `yay -S xdao` 安装，之后在终端输入 `xdao` 就可以启动了。感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
 * 建议搭配等宽字体使用。对于 Windows 用户，建议通过 [Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701) 使用这个客户端，在传统的终端下使用可能会存在一些问题。
 
 ## 配置文件
@@ -60,3 +62,8 @@ imagepreviewwidth = 24
 # 缩略图的最大高度
 imagepreviewheight = 6
 ```
+
+## 其他
+
+* 本项目包含了“芦苇娘表情包”（[黑白版](https://www.acfun.cn/a/ac10200508)、[彩色版](https://www.acfun.cn/a/ac15661021)）的下载链接。芦苇娘人物形象原作者为 ddzx1323，表情包由 Anime801 制作。
+* 虽然本项目的开源性质决定了任何人都可以自由地使用、修改和分发本项目的源代码，但原作者个人仍然会强烈反对和谴责尝试将本项目的源代码用于适配“阿苇岛匿名版”的行为。
