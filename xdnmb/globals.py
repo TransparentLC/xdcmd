@@ -8,6 +8,7 @@ import xdnmb.api
 import xdnmb.model
 import xdnmb.util
 
+from concurrent.futures import ThreadPoolExecutor
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.completion import Completion
 from prompt_toolkit.completion import PathCompleter
@@ -419,6 +420,8 @@ for textarea in (
         textarea.window,
     )
 
+imagePreloadExecutor = ThreadPoolExecutor()
+
 def forumGroupControlContainer() -> Container:
     return HSplit(
         forumGroups if forumGroups else tuple(),
@@ -475,6 +478,24 @@ def forumContentControlContainer() -> Container:
             thread,
             forumBottomButton.window,
         )
+
+    preload: list[xdnmb.model.Reply|xdnmb.model.Thread] = []
+    for c in children:
+        if (
+            isinstance(c, xdnmb.model.Reply)
+            and c.imagePreviewAvailable
+            and not getattr(c, 'imagePreviewLoaded', None)
+        ):
+            preload.append(c)
+            if isinstance(c, xdnmb.model.Thread) and c.replies:
+                for r in c.replies:
+                    if (
+                        r.imagePreviewAvailable
+                        and not getattr(r, 'imagePreviewLoaded', None)
+                    ):
+                        preload.append(r)
+    tuple(imagePreloadExecutor.map(lambda c: c.imagePreviewLabel, preload))
+
     return HSplit(
         children,
         style='class:content',

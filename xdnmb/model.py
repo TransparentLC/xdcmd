@@ -117,11 +117,37 @@ class Reply:
             result += c
         return result
 
-    @functools.cache
-    def __pt_container__(self) -> Container:
+    @functools.cached_property
+    def imagePreviewAvailable(self) -> bool:
         import xdnmb.globals
         import xdnmb.util
+        return (
+            self.imgThumb
+            and xdnmb.globals.config['Config'].getboolean('ImagePreview')
+            and not xdnmb.globals.config['Config'].getboolean('Monochrome')
+            and xdnmb.util.detectChafa()
+        )
 
+    # functools.cached_property在执行method和管理缓存时都需要锁
+    # functools.cache仅在管理缓存时需要锁，执行method不受锁的影响
+    # 为了让这个method在多线程下并行，需要用functools.cache和property的组合，而不是functools.cached_property
+
+    # @functools.cached_property
+    @property
+    @functools.cache
+    def imagePreviewLabel(self) -> Label|None:
+        import xdnmb.globals
+        import xdnmb.util
+        l = Label(ANSI(xdnmb.util.loadChafaImage(
+            self.imgThumb,
+            xdnmb.globals.config['Config'].getint('ImagePreviewWidth'),
+            xdnmb.globals.config['Config'].getint('ImagePreviewHeight'),
+        )))
+        setattr(self, 'imagePreviewLoaded', True)
+        return l
+
+    @functools.cache
+    def __pt_container__(self) -> Container:
         b = Button(
             text=f'No.{self.tid}',
             left_symbol='',
@@ -161,20 +187,11 @@ class Reply:
             html.escape(self.content),
         ))))
         if self.img:
-            if (
-                self.imgThumb
-                and xdnmb.globals.config['Config'].getboolean('ImagePreview')
-                and not xdnmb.globals.config['Config'].getboolean('Monochrome')
-                and xdnmb.util.detectChafa()
-            ):
-                try:
-                    children.append(Label(ANSI(xdnmb.util.loadChafaImage(
-                        self.imgThumb,
-                        xdnmb.globals.config['Config'].getint('ImagePreviewWidth'),
-                        xdnmb.globals.config['Config'].getint('ImagePreviewHeight'),
-                    ))))
-                except Exception as ex:
-                    children.append(Label(f'⚠️ 图片加载失败：{type(ex).__name__}: {ex}', style='class:tips'))
+            try:
+                if self.imagePreviewAvailable:
+                    children.append(self.imagePreviewLabel)
+            except Exception as ex:
+                children.append(Label(f'⚠️ 图片加载失败：{type(ex).__name__}: {ex}', style='class:tips'))
             children.append(Label(f'🖼️ 附加图片：{self.img}', style='class:tips'))
         return HSplit(tuple(children), style='class:content class:reply')
 
@@ -232,20 +249,11 @@ class Thread(Reply):
             html.escape(self.content),
         ))))
         if self.img:
-            if (
-                self.imgThumb
-                and xdnmb.globals.config['Config'].getboolean('ImagePreview')
-                and not xdnmb.globals.config['Config'].getboolean('Monochrome')
-                and xdnmb.util.detectChafa()
-            ):
-                try:
-                    children.append(Label(ANSI(xdnmb.util.loadChafaImage(
-                        self.imgThumb,
-                        xdnmb.globals.config['Config'].getint('ImagePreviewWidth'),
-                        xdnmb.globals.config['Config'].getint('ImagePreviewHeight'),
-                    ))))
-                except Exception as ex:
-                    children.append(Label(f'⚠️ 图片加载失败：{type(ex).__name__}: {ex}', style='class:tips'))
+            try:
+                if self.imagePreviewAvailable:
+                    children.append(self.imagePreviewLabel)
+            except Exception as ex:
+                children.append(Label(f'⚠️ 图片加载失败：{type(ex).__name__}: {ex}', style='class:tips'))
             children.append(Label(f'🖼️ 附加图片：{self.img}', style='class:tips'))
         children.append(Label(f'➕ 回应共有 {self.replyCount} 篇', style='class:tips'))
         children.append(Window(height=1))
