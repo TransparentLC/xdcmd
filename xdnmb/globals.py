@@ -494,7 +494,14 @@ def forumContentControlContainer() -> Container:
                         and not getattr(r, 'imagePreviewLoaded', None)
                     ):
                         preload.append(r)
-    tuple(imagePreloadExecutor.map(lambda c: c.imagePreviewLabel, preload))
+    preloadIter = imagePreloadExecutor.map(lambda c: c.imagePreviewLabel, preload)
+    while True:
+        try:
+            next(preloadIter)
+        except StopIteration:
+            break
+        except:
+            pass
 
     return HSplit(
         children,
