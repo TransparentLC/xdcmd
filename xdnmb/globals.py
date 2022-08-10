@@ -1,3 +1,4 @@
+import argparse
 import configparser
 import functools
 import os
@@ -40,6 +41,23 @@ from prompt_toolkit.widgets import TextArea
 
 BASE_PATH: str = os.path.realpath(sys._MEIPASS if hasattr(sys, '_MEIPASS') else '')
 APP_PATH = os.path.dirname(os.path.realpath(sys.executable if hasattr(sys, '_MEIPASS') else sys.argv[0]))
+XDG_CONFIG_PATH = os.path.join(
+    os.environ.get('XDG_CONFIG_HOME', os.path.expanduser(os.path.join('~', '.config'))),
+    'xdcmd',
+    'config.ini',
+)
+
+argparser = argparse.ArgumentParser(
+    description='X岛匿名版（https://nmbxd.com/）命令行客户端',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+)
+argparser.add_argument(
+    '--config', '-c',
+    dest='config',
+    default=XDG_CONFIG_PATH,
+    help='配置文件路径',
+)
+args = argparser.parse_args()
 
 config = configparser.RawConfigParser()
 config['DEFAULT'] = {
@@ -51,7 +69,23 @@ config['DEFAULT'] = {
     'ImagePreviewHeight': 6,
 }
 config['Config'] = {}
-config.read(os.path.join(APP_PATH, 'config.ini'))
+configLoaded = False
+for p in (
+    args.config,
+    os.path.join(APP_PATH, 'config.ini'),
+):
+    if os.path.exists(p):
+        config.read(p)
+        configLoaded = True
+        break
+if not configLoaded:
+    for k in config['Config']:
+        config['Config'][k] = config['Config'].get(k)
+    config['DEFAULT'] = {}
+    os.makedirs(os.path.split(XDG_CONFIG_PATH)[0], exist_ok=True)
+    with open(XDG_CONFIG_PATH, 'w', encoding='utf-8') as f:
+        config.write(f)
+
 if config['Config'].get('CDNPath'):
     xdnmb.api.CDN_PATH = config['Config'].get('CDNPath')
 else:
@@ -570,15 +604,7 @@ layout = Layout(container)
 keyBinding = KeyBindings()
 keyBinding.add('up', filter=Condition(lambda: not (len(container.floats) > 1 or showReplyForm)))(focus_previous)
 keyBinding.add('down', filter=Condition(lambda: not (len(container.floats) > 1 or showReplyForm)))(focus_next)
-
-@keyBinding.add('escape', 'e')
-def _(e: KeyPressEvent):
-    for k in config['Config']:
-        config['Config'][k] = config['Config'].get(k)
-    config['DEFAULT'] = {}
-    with open(os.path.join(APP_PATH, 'config.ini'), 'w', encoding='utf-8') as f:
-        config.write(f)
-    get_app().exit()
+keyBinding.add('escape', 'e')(lambda e: get_app().exit())
 
 @keyBinding.add('pageup')
 def _(e: KeyPressEvent):

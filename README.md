@@ -38,7 +38,15 @@
 
 ## 配置文件
 
-在第一次按 <kbd>Alt+E</kbd> 正常退出后，会在 `main.py` 所在的目录下写入配置文件 `config.ini`（如果使用 AUR 包安装，则路径为 `/usr/share/xdao/config.ini`），配置文件的内容如下：
+在启动时，会按照以下顺序查找配置文件：
+
+* 使用命令行参数 `--config` 或 `-c` 指定的配置文件路径。
+* `$XDG_CONFIG_HOME/xdcmd/config.ini`，其中 `$XDG_CONFIG_HOME` 的默认值为 `~/.config`，在 Windows 下 `~` 相当于 `%HOMEPATH%`。
+* `main.py` 所在目录的 `config.ini`。
+
+如果没有找到配置文件，则会在 `$XDG_CONFIG_HOME/xdcmd/config.ini` 写入默认的配置文件。
+
+配置文件的内容如下：
 
 ```ini
 [Config]
