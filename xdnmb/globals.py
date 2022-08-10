@@ -67,6 +67,8 @@ config['DEFAULT'] = {
     'ImagePreview': True,
     'ImagePreviewWidth': 24,
     'ImagePreviewHeight': 6,
+    'HideTips': False,
+    'HideCookie': False,
 }
 config['Config'] = {}
 configLoaded = False

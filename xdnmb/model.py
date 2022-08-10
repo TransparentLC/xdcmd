@@ -148,6 +148,8 @@ class Reply:
 
     @functools.cache
     def __pt_container__(self) -> Container:
+        import xdnmb.globals
+
         b = Button(
             text=f'No.{self.tid}',
             left_symbol='',
@@ -173,7 +175,14 @@ class Reply:
                         self.title,
                         self.name,
                         self.now.strftime('%Y-%m-%d %H:%M:%S'),
-                        self.userHash,
+                        (
+                            '*' * len(self.userHash)
+                            if (
+                                xdnmb.globals.config['Config'].getboolean('HideCookie')
+                                and not self.admin
+                            )
+                            else self.userHash
+                        ),
                     ),
                     dont_extend_width=True,
                 ),
@@ -233,7 +242,14 @@ class Thread(Reply):
                         self.title,
                         self.name,
                         self.now.strftime('%Y-%m-%d %H:%M:%S'),
-                        self.userHash,
+                        (
+                            '*' * len(self.userHash)
+                            if (
+                                xdnmb.globals.config['Config'].getboolean('HideCookie')
+                                and not self.admin
+                            )
+                            else self.userHash
+                        ),
                     ),
                     dont_extend_width=True,
                 ),
@@ -259,6 +275,14 @@ class Thread(Reply):
         children.append(Window(height=1))
         if self.replies:
             for reply in self.replies:
+                if (
+                    xdnmb.globals.config['Config'].getboolean('HideTips')
+                    and reply.admin
+                    and reply.title == 'Tips'
+                    and reply.userHash == 'Tips'
+                    and reply.tid == 9999999
+                ):
+                    continue
                 children.append(reply.__pt_container__())
                 children.append(Window(height=1))
         return HSplit(tuple(children), style='class:content')

@@ -69,6 +69,11 @@ imagepreview = True
 imagepreviewwidth = 24
 # 缩略图的最大高度
 imagepreviewheight = 6
+# 隐藏Tips
+hidetips = False
+# 隐藏饼干
+# 红名的名字和PO主的标记不会被隐藏
+hidecookie = False
 ```
 
 ## 其他
