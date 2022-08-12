@@ -58,6 +58,11 @@ cdnpath = https://image.nmb.best/
 # 自行在用户系统中扫描饼干二维码，可以得到形如{"cookie":"...","name":"..."}的JSON数据
 # 将cookie字段的值填到这里就可以了（这个饼干是随机生成的示例，并不能实际使用）
 cookie = Y%85m%E5J5%F4%7D%98%DB%98%0Cm%08%11%9DV%1EIi%956W%10
+# 订阅ID
+# 可以通过python -c "import secrets;print(secrets.token_urlsafe(24))"随机生成一个
+# 虽然API里用的参数名称都是UUID，但是实际上可以使用任意字符串
+# 也可以将在其他客户端使用的订阅ID填到这里
+feeduuid = C7hswJmRY1eHo6FfCqJbmWgva8D3vAI6
 # 使用单色模式
 monochrome = False
 # 显示缩略图
@@ -80,3 +85,4 @@ hidecookie = False
 
 * 本项目包含了“芦苇娘表情包”（[黑白版](https://www.acfun.cn/a/ac10200508)、[彩色版](https://www.acfun.cn/a/ac15661021)）的下载链接。芦苇娘人物形象原作者为 ddzx1323，表情包由 Anime801 制作。
 * 虽然本项目的开源性质决定了任何人都可以自由地使用、修改和分发本项目的源代码，但原作者个人仍然会强烈反对和谴责尝试将本项目的源代码用于适配“阿苇岛匿名版”的行为。
+* 可以参考的 X 岛匿名版 API 相关资料：三酱提供的[原版 API 文档](https://www.zybuluo.com/ovear/note/151481)、紫岛源代码中[构建 URL](https://github.com/seven332/Nimingban/blob/master/app/src/main/java/com/hippo/nimingban/client/ac/ACUrl.java) 和[调用 API](https://github.com/seven332/Nimingban/blob/master/app/src/main/java/com/hippo/nimingban/client/ac/ACEngine.java) 的相关代码。

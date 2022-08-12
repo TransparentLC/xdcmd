@@ -63,6 +63,7 @@ config = configparser.RawConfigParser()
 config['DEFAULT'] = {
     'CDNPath': '',
     'Cookie': '',
+    'FeedUUID': '',
     'Monochrome': False,
     'ImagePreview': True,
     'ImagePreviewWidth': 24,
@@ -426,7 +427,11 @@ def postThread():
     )
     global showReplyForm
     showReplyForm = False
-    xdnmb.util.floatAlert('', '发表成功')
+    replyNameTextarea.text = ''
+    replyTitleTextarea.text = ''
+    replyContentTextarea.text = ''
+    replyImageTextarea.text = ''
+    xdnmb.util.floatAlert('发串', '发表成功')
 
 replyNameTextarea = TextArea(multiline=False)
 replyTitleTextarea = TextArea(multiline=False)
@@ -576,6 +581,7 @@ container = FloatContainer(
                 ('Enter', '查看版面/串'),
                 ('PgUp/PgDn', '翻页'),
                 ('Alt+P', '串内跳页'),
+                ('Alt+=/-', '添加/删除订阅'),
             )
         )),
         VSplit(tuple(
@@ -752,10 +758,22 @@ def _(e: KeyPressEvent):
                 cm[f'>>No.{t.tid}'] = f'引用：“{t.summary(24)}”'
 
         replyContentTextarea.completer = WordCompleter(cw, meta_dict=cm)
-        replyNameTextarea.text = ''
-        replyTitleTextarea.text = ''
-        replyContentTextarea.text = ''
-        replyImageTextarea.text = ''
         layout.focus(replyContentTextarea)
     else:
         xdnmb.util.focusToButton(None, xdnmb.model.ButtonType.Forum)
+
+@keyBinding.add('escape', '=')
+@xdnmb.util.floatAlertExceptionCatch
+def _(e: KeyPressEvent):
+    if not thread:
+        return
+    xdnmb.api.addFeed(thread)
+    xdnmb.util.floatAlert('订阅', '订阅大成功→_→')
+
+@keyBinding.add('escape', '-')
+@xdnmb.util.floatAlertExceptionCatch
+def _(e: KeyPressEvent):
+    if not thread:
+        return
+    xdnmb.api.delFeed(thread)
+    xdnmb.util.floatAlert('订阅', '取消订阅大成功←_←')

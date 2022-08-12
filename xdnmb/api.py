@@ -156,38 +156,28 @@ def getThread(thread: xdnmb.model.Thread, page: int = 1) -> xdnmb.model.Thread:
 
 @functools.lru_cache(1024)
 def getReference(tid: int) -> xdnmb.model.Reply:
-    r = session.get(urljoin(HTML_API_ENDPOINT, 'ref'), params={
+    r = session.get(urljoin(JSON_API_ENDPOINT, 'ref'), params={
         'id': tid,
     })
-    soup = BeautifulSoup(r.text, features='lxml')
-    if not soup.select_one('.h-threads-item-reply.h-threads-item-ref[data-threads-id]').attrs['data-threads-id']:
-        raise Exception('引用的串号不存在')
-    imgNode = soup.select_one('.h-threads-img-a')
-    if imgNode:
-        img = imgNode.attrs['href']
-    else:
-        img = None
-    imgThumbNode = soup.select_one('.h-threads-img-a > img.h-threads-img')
-    if imgThumbNode:
-        imgThumb = imgThumbNode.attrs['src']
-    else:
-        imgThumb = None
-    now = xdnmb.util.parseThreadTime(soup.select_one('.h-threads-info-createdat').text)
-    userHash = xdnmb.util.stripHTML(soup.select_one('.h-threads-info-uid')).removeprefix('ID:')
-    name = xdnmb.util.stripHTML(soup.select_one('.h-threads-info-email'))
-    title = xdnmb.util.stripHTML(soup.select_one('.h-threads-info-title'))
-    content = xdnmb.util.stripHTML(soup.select_one('.h-threads-content'))
-    admin = bool(soup.select_one('.h-threads-info-uid > font[color="red"]'))
+    refRaw = r.json()
     return xdnmb.model.Reply(
         tid=tid,
-        img=img,
-        imgThumb=imgThumb,
-        now=now,
-        userHash=userHash,
-        name=name,
-        title=title,
-        content=content,
-        admin=admin,
+        img=(
+            (CDN_PATH + 'image/' + refRaw['img'] + refRaw['ext'])
+            if refRaw['img'] and refRaw['ext']
+            else None
+        ),
+        imgThumb=(
+            (CDN_PATH + 'thumb/' + refRaw['img'] + refRaw['ext'])
+            if refRaw['img'] and refRaw['ext']
+            else None
+        ),
+        now=xdnmb.util.parseThreadTime(refRaw['now']),
+        userHash=refRaw['user_hash'],
+        name=refRaw['name'],
+        title=refRaw['title'],
+        content=xdnmb.util.stripHTML(refRaw['content']),
+        admin=bool(refRaw['admin']),
         isPo=False,
     )
 
@@ -231,3 +221,64 @@ def postThread(
     errorNode = soup.select_one('.error')
     if errorNode:
         raise Exception(xdnmb.util.stripHTML(errorNode))
+
+def getFeed(page: int = 1) -> tuple[xdnmb.model.Thread, ...]:
+    r = session.get(urljoin(JSON_API_ENDPOINT, 'feed'), params={
+        'uuid': xdnmb.globals.config['Config'].get('FeedUUID'),
+        'page': page,
+    })
+    threads: list[xdnmb.model.Thread] = []
+    for threadRaw in r.json():
+        threads.append(xdnmb.model.Thread(
+            tid=int(threadRaw['id']),
+            replyCount=int(threadRaw['reply_count']),
+            img=(
+                (CDN_PATH + 'image/' + threadRaw['img'] + threadRaw['ext'])
+                if threadRaw['img'] and threadRaw['ext']
+                else None
+            ),
+            imgThumb=(
+                (CDN_PATH + 'thumb/' + threadRaw['img'] + threadRaw['ext'])
+                if threadRaw['img'] and threadRaw['ext']
+                else None
+            ),
+            now=xdnmb.util.parseThreadTime(threadRaw['now']),
+            userHash=threadRaw['user_hash'],
+            name=threadRaw['name'] or '无名氏',
+            title=threadRaw['title'] or '无标题',
+            content=xdnmb.util.stripHTML(threadRaw['content']),
+            sage=False,
+            admin=bool(int(threadRaw['admin'])),
+            forum=next(
+                (forum for forum in xdnmb.globals.forums if forum.fid == int(threadRaw['fid'])),
+                None,
+            ),
+            isPo=False,
+        ))
+    return tuple(threads)
+
+def addFeed(thread: xdnmb.model.Thread):
+    r = session.post(urljoin(JSON_API_ENDPOINT, 'addFeed'), data={
+        'uuid': xdnmb.globals.config['Config'].get('FeedUUID'),
+        'tid': thread.tid,
+    })
+    if r.text != '"\\u8ba2\\u9605\\u5927\\u6210\\u529f\\u2192_\\u2192"':
+        if 'application/json' in r.headers['Content-Type']:
+            raise Exception(r.json())
+        elif 'text/html' in r.headers['Content-Type']:
+            raise Exception(xdnmb.util.stripHTML(BeautifulSoup(r.text, features='lxml').select_one('.error')))
+        else:
+            raise Exception(r.text)
+
+def delFeed(thread: xdnmb.model.Thread):
+    r = session.post(urljoin(JSON_API_ENDPOINT, 'delFeed'), data={
+        'uuid': xdnmb.globals.config['Config'].get('FeedUUID'),
+        'tid': thread.tid,
+    })
+    if r.text != '"\\u53d6\\u6d88\\u8ba2\\u9605\\u6210\\u529f!"':
+        if 'application/json' in r.headers['Content-Type']:
+            raise Exception(r.json())
+        elif 'text/html' in r.headers['Content-Type']:
+            raise Exception(xdnmb.util.stripHTML(BeautifulSoup(r.text, features='lxml').select_one('.error')))
+        else:
+            raise Exception(r.text)

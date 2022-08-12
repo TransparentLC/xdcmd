@@ -67,6 +67,28 @@ class Timeline:
         return b.window
 
 @dataclasses.dataclass(unsafe_hash=True)
+class Feed:
+    name = '订阅的串'
+
+    @property
+    def notice(self) -> str:
+        import xdnmb.globals
+        return f'订阅过的串。\n当前使用的订阅ID：{xdnmb.globals.config["Config"].get("FeedUUID")}'
+
+    @functools.cache
+    def __pt_container__(self) -> Container:
+        b = Button(
+            text='  订阅的串',
+            left_symbol='',
+            right_symbol='',
+            width=0,
+            handler=functools.partial(xdnmb.action.loadForum, self)
+        )
+        b.window.align = WindowAlign.LEFT
+        setattr(b.window, 'buttonType', ButtonType.Forum)
+        return b.window
+
+@dataclasses.dataclass(unsafe_hash=True)
 class ForumGroup:
     gid: int
     sort: int
