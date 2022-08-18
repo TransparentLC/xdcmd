@@ -70,6 +70,7 @@ config['DEFAULT'] = {
     'ImagePreviewHeight': 6,
     'HideTips': False,
     'HideCookie': False,
+    'PoOnly': False,
 }
 config['Config'] = {}
 configLoaded = False

@@ -123,10 +123,13 @@ def getForum(forum: xdnmb.model.Forum|xdnmb.model.Timeline, page: int = 1) -> tu
     return tuple(threads)
 
 def getThread(thread: xdnmb.model.Thread, page: int = 1) -> xdnmb.model.Thread:
-    r = session.get(urljoin(JSON_API_ENDPOINT, 'thread'), params={
-        'id': thread.tid,
-        'page': page,
-    })
+    r = session.get(
+        urljoin(JSON_API_ENDPOINT, 'po' if xdnmb.globals.config['Config'].getboolean('PoOnly') else 'thread'),
+        params={
+            'id': thread.tid,
+            'page': page,
+        },
+    )
     thread = dataclasses.replace(thread)
     thread.replyCount = r.json()['ReplyCount']
     thread.replies = []

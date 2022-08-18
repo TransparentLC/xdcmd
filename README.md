@@ -12,22 +12,6 @@
 
 “在命令行的环境下重现 X 岛网页版的刷岛体验”，原本只是这么一个很简单的想法，在做出初步的原型然后发到岛上之后意外地很受肥肥们的欢迎，于是就继续把完整版做出来了 (\*´ω`\*)
 
-<details>
-
-<summary>实际使用截图</summary>
-
-![](https://user-images.githubusercontent.com/47057319/182030800-f2d3fce9-5581-433c-8cb5-ed04acd2fe7b.png)
-
-![](https://user-images.githubusercontent.com/47057319/182030803-62d1259f-f7af-4c68-a015-81711f41493d.png)
-
-![](https://user-images.githubusercontent.com/47057319/182030805-cfb44b6d-09dc-48cf-af52-fe4de2abd6e3.png)
-
-![](https://user-images.githubusercontent.com/47057319/182030806-dbe8943c-931b-4adf-8776-4628f63ad38e.png)
-
-> 上图的效果为启用单色模式后，与 Windows Terminal 的[“怀旧式命令提示符”](https://docs.microsoft.com/zh-cn/windows/terminal/custom-terminal-gallery/retro-command-prompt)一起使用的效果。
-
-</details>
-
 由于技术和精力所限，这个客户端只能实现看串、发串、查看引用和订阅管理这些比较基本的功能，没有实现历史记录和饼干切换等高级功能，在功能丰富程度和使用体验上均与 X 岛的网页版以及已有的手机客户端相差甚远。在这些基本功能完成后，**除非存在严重影响使用的恶性 BUG 需要修复，我可能不会继续实现更多的功能需求**。当然如果你愿意贡献代码，那就再好不过啦！(ゝ∀･)
 
 不管怎么说，在命令行里刷岛这件事本身已经非常炫酷了 ᕕ( ᐛ )ᕗ
@@ -35,6 +19,18 @@
 * 执行 `python main.py` 就可以启动了，在此之前不要忘了 `pip install -r requirements.txt`，需要使用 Python 3.10 或以上的版本。
 * 如果你是 Arch Linux 用户，也可以使用 `yay -S xdao` 安装，之后在终端输入 `xdao` 就可以启动了。感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
 * 建议搭配等宽字体使用。对于 Windows 用户，建议通过 [Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701) 使用这个客户端，在传统的终端下使用可能会存在一些问题。
+
+## 使用截图
+
+| 查看版面 | 查看串 | 发串 |
+| --- | --- | --- |
+| ![](https://user-images.githubusercontent.com/47057319/182030800-f2d3fce9-5581-433c-8cb5-ed04acd2fe7b.png) | ![](https://user-images.githubusercontent.com/47057319/182030803-62d1259f-f7af-4c68-a015-81711f41493d.png) | ![](https://user-images.githubusercontent.com/47057319/182030805-cfb44b6d-09dc-48cf-af52-fe4de2abd6e3.png) |
+
+| 用 VSCode 刷岛 | [用哔哔小子刷岛（？）](https://m.weibo.cn/detail/4797497303630002) |
+| --- | --- | --- |
+| ![](https://user-images.githubusercontent.com/47057319/185427750-ffa91eb4-0e93-4afe-bfdb-34ce8df430d3.png) | ![](https://user-images.githubusercontent.com/47057319/182030806-dbe8943c-931b-4adf-8776-4628f63ad38e.png) |
+
+> 在配置文件中启用单色模式，并按照[“怀旧式命令提示符”](https://docs.microsoft.com/zh-cn/windows/terminal/custom-terminal-gallery/retro-command-prompt)的教程设置 Windows Terminal 主题，即可体验“用哔哔小子刷岛”的效果。
 
 ## 配置文件
 
@@ -51,7 +47,7 @@
 ```ini
 [Config]
 # 图片CDN地址
-# 如果留空则运行时会通过https://api.nmb.best/api/getCDNPath自动获取
+# 如果留空，则运行时会通过X岛API自动获取
 # 一般不需要手动设定
 cdnpath = https://image.nmb.best/
 # 饼干
@@ -79,6 +75,9 @@ hidetips = False
 # 隐藏饼干
 # 红名的名字和PO主的标记不会被隐藏
 hidecookie = False
+# 只看PO
+# 不会影响Tips的出现
+poonly = False
 ```
 
 ## 其他
