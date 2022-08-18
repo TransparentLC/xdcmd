@@ -153,4 +153,4 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
             os.remove(temp)
     if p.returncode:
         raise subprocess.CalledProcessError(p.returncode, cmd)
-    return result.decode('utf-8').split('\033[6A')[0].replace('\r', '').strip()
+    return re.split(r'\033\[\d*A', result.decode('utf-8'), 1)[0].replace('\r', '').strip()
