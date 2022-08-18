@@ -27,7 +27,7 @@
 | ![](https://user-images.githubusercontent.com/47057319/182030800-f2d3fce9-5581-433c-8cb5-ed04acd2fe7b.png) | ![](https://user-images.githubusercontent.com/47057319/182030803-62d1259f-f7af-4c68-a015-81711f41493d.png) | ![](https://user-images.githubusercontent.com/47057319/182030805-cfb44b6d-09dc-48cf-af52-fe4de2abd6e3.png) |
 
 | 用 VSCode 刷岛 | [用哔哔小子刷岛（？）](https://m.weibo.cn/detail/4797497303630002) |
-| --- | --- | --- |
+| --- | --- |
 | ![](https://user-images.githubusercontent.com/47057319/185427750-ffa91eb4-0e93-4afe-bfdb-34ce8df430d3.png) | ![](https://user-images.githubusercontent.com/47057319/182030806-dbe8943c-931b-4adf-8776-4628f63ad38e.png) |
 
 > 在配置文件中启用单色模式，并按照[“怀旧式命令提示符”](https://docs.microsoft.com/zh-cn/windows/terminal/custom-terminal-gallery/retro-command-prompt)的教程设置 Windows Terminal 主题，即可体验“用哔哔小子刷岛”的效果。
