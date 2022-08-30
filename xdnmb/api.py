@@ -57,7 +57,7 @@ def getForumList() -> tuple[xdnmb.model.ForumGroup, ...]:
             forums.append(xdnmb.model.Forum(
                 fid=int(forumRaw['id']),
                 sort=int(forumRaw['sort']),
-                name=forumRaw['showName'] or forumRaw['name'],
+                name=xdnmb.util.stripHTML(forumRaw['showName'] or forumRaw['name']),
                 notice=xdnmb.util.stripHTML(forumRaw['msg']),
                 threadCount=int(forumRaw['thread_count']),
             ))
@@ -77,7 +77,7 @@ def getTimelineList() -> tuple[xdnmb.model.Timeline, ...]:
     for timelineRaw in r.json():
         timelines.append(xdnmb.model.Timeline(
             fid=timelineRaw['id'],
-            name=timelineRaw['display_name'] or timelineRaw['name'],
+            name=xdnmb.util.stripHTML(timelineRaw['display_name'] or timelineRaw['name']),
             notice=xdnmb.util.stripHTML(timelineRaw['notice']),
             maxPage=timelineRaw['max_page']
         ))
