@@ -381,6 +381,22 @@ STICKERS: dict[str, str] = {f'${k}$': v for k, v in ({
     '彩色芦苇娘:⊂彡☆))∀`)': 'https://gcore.jsdelivr.net/gh/TransparentLC/xdcmd@reedgirl-colored/aIUu872T.gif',
     '彩色芦苇娘:(´∀((☆ミつ': 'https://gcore.jsdelivr.net/gh/TransparentLC/xdcmd@reedgirl-colored/GlfdxYg3.gif',
     '彩色芦苇娘:( ´_ゝ`)旦': 'https://gcore.jsdelivr.net/gh/TransparentLC/xdcmd@reedgirl-colored/Bj7189TU.gif',
+    '凉宫Tips娘:害羞': xdnmb.api.CDN_PATH + 'image/2022-08-21/6302122aac4a1.png',
+    '凉宫Tips娘:怒': xdnmb.api.CDN_PATH + 'image/2022-08-21/6302126774399.png',
+    '凉宫Tips娘:无语': xdnmb.api.CDN_PATH + 'image/2022-08-21/63021285e5e32.png',
+    '凉宫Tips娘:kira': xdnmb.api.CDN_PATH + 'image/2022-08-21/6302129d68127.png',
+    '凉宫Tips娘:尴尬': xdnmb.api.CDN_PATH + 'image/2022-08-21/630212b85961f.png',
+    '凉宫Tips娘:晕': xdnmb.api.CDN_PATH + 'image/2022-08-21/630212d5c3b84.png',
+    '凉宫Tips娘:汗': xdnmb.api.CDN_PATH + 'image/2022-08-21/630212ed9616d.png',
+    '凉宫Tips娘:咋回事': xdnmb.api.CDN_PATH + 'image/2022-08-21/6302130783f36.png',
+    '凉宫Tips娘:笑': xdnmb.api.CDN_PATH + 'image/2022-08-21/63021334de5bb.png',
+    '凉宫Tips娘:弱智': xdnmb.api.CDN_PATH + 'image/2022-08-21/63021352a351f.png',
+    '凉宫Tips娘:指责': xdnmb.api.CDN_PATH + 'image/2022-08-21/6302137130c0b.png',
+    '凉宫Tips娘:右看': xdnmb.api.CDN_PATH + 'image/2022-08-21/6302138e9718c.png',
+    '凉宫Tips娘:囧': xdnmb.api.CDN_PATH + 'image/2022-08-21/630213a9d0aa7.png',
+    '凉宫Tips娘:小哭': xdnmb.api.CDN_PATH + 'image/2022-08-21/630213c95e30d.png',
+    '凉宫Tips娘:大哭': xdnmb.api.CDN_PATH + 'image/2022-08-21/630212010be9d.png',
+    '凉宫Tips娘:睡': xdnmb.api.CDN_PATH + 'image/2022-08-21/63021212bebe9.png',
 }).items()}
 
 forumGroups: list[xdnmb.model.ForumGroup] = []
@@ -498,8 +514,9 @@ def forumContentControlContainer() -> Container:
                 '* 在“附加图片”中可以使用：\n'
                 '  * 本地的图片路径，同样可以使用自动补全。\n'
                 '  * 以 https:// 或 http:// 开头的在线图片 URL。\n'
-                '  * 输入“$芦苇娘:...$”或“$彩色芦苇娘:...$”，可以发送与颜文字对应的芦苇娘表情包。'
-                    '芦苇娘人物形象原作者为 ddzx1323，表情包由 Anime801 制作。\n'
+                '  * 输入“$芦苇娘:...$”、“$彩色芦苇娘:...$”或“$凉宫Tips娘:...$”，可以发送对应的表情包。'
+                    '芦苇娘人物形象原作者为 ddzx1323，表情包由 Anime801 制作。'
+                    '凉宫 Tips 娘人物形象原作者为饼干为“iVUmXcE”的肥肥（No.50666176），表情包由饼干为“9QybryU”的肥肥制作（No.51412777）。\n'
             )),
         )
     elif not forum:
