@@ -1,10 +1,12 @@
 import datetime
 import functools
+import gzip
 import os
 import re
 import secrets
 import subprocess
 import tempfile
+import time
 import typing
 import warnings
 import xdnmb.api
@@ -24,6 +26,39 @@ from prompt_toolkit.widgets import Label
 from prompt_toolkit.widgets import TextArea
 
 warnings.filterwarnings('ignore', category=MarkupResemblesLocatorWarning, module='bs4')
+
+def lruCacheGet(key: str) -> bytes|None:
+    row = xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
+        'SELECT `value` FROM `cache` WHERE `key` = ?',
+        (key,),
+    ).fetchone()
+    if row:
+        xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
+            'UPDATE `cache` SET `timestamp` = ? WHERE `key` = ?',
+            (int(time.time()), key),
+        )
+        return row[0]
+    else:
+        return None
+
+def lruCacheSet(key: str, value: bytes|None, rowLimit: int):
+    if xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
+        'SELECT EXISTS(SELECT 1 FROM `cache` WHERE `key` = ?)',
+        (key,),
+    ).fetchone()[0]:
+        xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
+            'UPDATE `cache` SET `timestamp` = ?, `value` = ? WHERE `key` = ?',
+            (int(time.time()), value, key),
+        )
+    else:
+        xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
+            'INSERT INTO `cache`(`timestamp`, `key`, `value`) VALUES (?, ?, ?)',
+            (int(time.time()), key, value),
+        )
+    xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
+        'DELETE FROM `cache` WHERE `id` NOT IN (SELECT `id` FROM `cache` ORDER BY `timestamp` DESC LIMIT ?)',
+        (rowLimit,),
+    )
 
 def stripHTML(text: str|BeautifulSoup|Tag) -> str:
     if isinstance(text, (BeautifulSoup, Tag)):
@@ -122,8 +157,13 @@ def detectChafa() -> bool:
     except FileNotFoundError:
         return False
 
-@functools.lru_cache(1024)
+@functools.lru_cache(256)
 def loadChafaImage(url: str, width: int, height: int) -> str:
+    cacheKey = ':'.join((url, str(width), str(height)))
+    cached = lruCacheGet(cacheKey)
+    if cached:
+        return gzip.decompress(cached).decode('utf-8')
+
     temp = os.path.join(tempfile.gettempdir(), secrets.token_urlsafe(12))
     cmd = (
         'chafa',
@@ -153,4 +193,6 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
             os.remove(temp)
     if p.returncode:
         raise subprocess.CalledProcessError(p.returncode, cmd)
-    return re.split(r'\033\[\d*A', result.decode('utf-8'), 1)[0].replace('\r', '').strip()
+    result = re.split(r'\033\[\d*A', result.decode('utf-8'), 1)[0].replace('\r', '').strip()
+    lruCacheSet(cacheKey, gzip.compress(result.encode('utf-8'), 9), 16384)
+    return result

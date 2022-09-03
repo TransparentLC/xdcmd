@@ -2,6 +2,7 @@ import argparse
 import configparser
 import functools
 import os
+import sqlite3
 import sys
 import typing
 import xdnmb.action
@@ -44,8 +45,33 @@ APP_PATH = os.path.dirname(os.path.realpath(sys.executable if hasattr(sys, '_MEI
 XDG_CONFIG_PATH = os.path.join(
     os.environ.get('XDG_CONFIG_HOME', os.path.expanduser(os.path.join('~', '.config'))),
     'xdcmd',
-    'config.ini',
 )
+XDG_CACHE_PATH = os.path.join(
+    os.environ.get('XDG_CACHE_HOME', os.path.expanduser(os.path.join('~', '.cache'))),
+    'xdcmd',
+)
+os.makedirs(XDG_CONFIG_PATH, exist_ok=True)
+os.makedirs(XDG_CACHE_PATH, exist_ok=True)
+LRU_CACHE_DB = sqlite3.connect(os.path.join(XDG_CACHE_PATH, 'lru-cache.db'), isolation_level=None)
+LRU_CACHE_DB.executescript(''.join(x.strip() for x in '''
+PRAGMA journal_mode = wal;
+CREATE TABLE IF NOT EXISTS "cache" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "timestamp" DATE NOT NULL,
+    "key" TEXT NOT NULL,
+    "value" BLOB,
+    CONSTRAINT "const_key" UNIQUE ("key")
+);
+CREATE UNIQUE INDEX IF NOT EXISTS "main"."idx_key"
+ON "cache" (
+    "key"
+);
+CREATE INDEX IF NOT EXISTS "main"."idx_timestamp"
+ON "cache" (
+    "timestamp"
+);
+'''.splitlines()))
+LRU_CACHE_DB_CURSOR = LRU_CACHE_DB.cursor()
 
 argparser = argparse.ArgumentParser(
     description='X岛匿名版（https://nmbxd.com/）命令行客户端',
@@ -54,7 +80,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '--config', '-c',
     dest='config',
-    default=XDG_CONFIG_PATH,
+    default=os.path.join(XDG_CONFIG_PATH, 'config.ini'),
     help='配置文件路径',
 )
 args = argparser.parse_args()
@@ -86,8 +112,7 @@ if not configLoaded:
     for k in config['Config']:
         config['Config'][k] = config['Config'].get(k)
     config['DEFAULT'] = {}
-    os.makedirs(os.path.split(XDG_CONFIG_PATH)[0], exist_ok=True)
-    with open(XDG_CONFIG_PATH, 'w', encoding='utf-8') as f:
+    with open(os.path.join(XDG_CONFIG_PATH, 'config.ini'), 'w', encoding='utf-8') as f:
         config.write(f)
 
 if config['Config'].get('CDNPath'):
@@ -626,7 +651,10 @@ layout = Layout(container)
 keyBinding = KeyBindings()
 keyBinding.add('up', filter=Condition(lambda: not (len(container.floats) > 1 or showReplyForm)))(focus_previous)
 keyBinding.add('down', filter=Condition(lambda: not (len(container.floats) > 1 or showReplyForm)))(focus_next)
-keyBinding.add('escape', 'e')(lambda e: get_app().exit())
+keyBinding.add('escape', 'e')(lambda e: (
+    LRU_CACHE_DB.close(),
+    get_app().exit(),
+))
 
 @keyBinding.add('pageup')
 def _(e: KeyPressEvent):

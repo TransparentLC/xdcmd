@@ -17,6 +17,9 @@
 不管怎么说，在命令行里刷岛这件事本身已经非常炫酷了 ᕕ( ᐛ )ᕗ
 
 * 执行 `python main.py` 就可以启动了，在此之前不要忘了 `pip install -r requirements.txt`，需要使用 Python 3.10 或以上的版本。
+* 你也可以手动在 `PATH` 下创建一个用于快速启动的脚本。例如，想要在终端输入 `xdcmd` 直接启动此项目：
+  * Windows：`(echo @echo off & echo python /path/to/xdcmd/main.py %*) > %SystemRoot%\xdcmd.cmd`
+  * Linux：`(echo '#!/bin/sh\npython3 /path/to/xdcmd/main.py "$@"' > /usr/local/bin/xdcmd) && chmod +x /usr/local/bin/xdcmd`
 * 如果你是 Arch Linux 用户，也可以使用 `yay -S xdao` 安装，之后在终端输入 `xdao` 就可以启动了。感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
 * 建议搭配等宽字体使用。对于 Windows 用户，建议通过 [Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701) 使用这个客户端，在传统的终端下使用可能会存在一些问题。
 
@@ -56,7 +59,7 @@ cdnpath = https://image.nmb.best/
 cookie = Y%85m%E5J5%F4%7D%98%DB%98%0Cm%08%11%9DV%1EIi%956W%10
 # 订阅ID
 # 可以通过python -c "import secrets;print(secrets.token_urlsafe(24))"随机生成一个
-# 虽然API里用的参数名称都是UUID，但是实际上可以使用任意字符串
+# 虽然API里用的参数名称都是UUID，但是实际上可以使用包括空字符串在内的任意字符串
 # 也可以将在其他客户端使用的订阅ID填到这里
 feeduuid = C7hswJmRY1eHo6FfCqJbmWgva8D3vAI6
 # 使用单色模式
@@ -85,4 +88,5 @@ poonly = False
 * 本项目包含了“芦苇娘表情包”（[黑白版](https://www.acfun.cn/a/ac10200508)、[彩色版](https://www.acfun.cn/a/ac15661021)）的下载链接。芦苇娘人物形象原作者为 ddzx1323，表情包由 Anime801 制作。
 * 本项目包含了“凉宫 Tips 娘表情包”的下载链接。凉宫 Tips 娘人物形象原作者为饼干为“iVUmXcE”的肥肥（[No.50666176](https://nmbxd.com/t/50666176)），表情包由饼干为“9QybryU”的肥肥制作（[No.51412777](https://nmbxd.com/t/51412777)）。
 * 虽然本项目的开源性质决定了任何人都可以自由地使用、修改和分发本项目的源代码，但原作者个人仍然会强烈反对和谴责尝试将本项目的源代码用于适配“阿苇岛匿名版”的行为。
+* 加载过的缩略图缓存保存位置为 `$XDG_CACHE_HOME/xdcmd/lru-cache.db`，其中 `$XDG_CACHE_HOME` 的默认值为 `~/.cache`。
 * 可以参考的 X 岛匿名版 API 相关资料：三酱提供的[原版 API 文档](https://www.zybuluo.com/ovear/note/151481)、紫岛源代码中[构建 URL](https://github.com/seven332/Nimingban/blob/master/app/src/main/java/com/hippo/nimingban/client/ac/ACUrl.java) 和[调用 API](https://github.com/seven332/Nimingban/blob/master/app/src/main/java/com/hippo/nimingban/client/ac/ACEngine.java) 的相关代码。
