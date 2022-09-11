@@ -1,3 +1,4 @@
+from __future__ import annotations
 import xdnmb.api
 import xdnmb.model
 import xdnmb.globals
