@@ -3,3 +3,4 @@ lxml == 4.*
 prompt-toolkit >= 3.0.30, < 4.*
 requests == 2.*
 wcwidth == 0.2.*
+orjson == 3.*

@@ -1,3 +1,4 @@
+from __future__ import annotations
 import datetime
 import functools
 import gzip
@@ -25,12 +26,15 @@ from prompt_toolkit.widgets import Dialog
 from prompt_toolkit.widgets import Label
 from prompt_toolkit.widgets import TextArea
 
-warnings.filterwarnings('ignore', category=MarkupResemblesLocatorWarning, module='bs4')
+warnings.filterwarnings('ignore',
+                        category=MarkupResemblesLocatorWarning,
+                        module='bs4')
 
-def lruCacheGet(key: str) -> bytes|None:
+
+def lruCacheGet(key: str) -> bytes | None:
     row = xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
         'SELECT `value` FROM `cache` WHERE `key` = ?',
-        (key,),
+        (key, ),
     ).fetchone()
     if row:
         xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
@@ -41,10 +45,11 @@ def lruCacheGet(key: str) -> bytes|None:
     else:
         return None
 
-def lruCacheSet(key: str, value: bytes|None, rowLimit: int):
+
+def lruCacheSet(key: str, value: bytes | None, rowLimit: int):
     if xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
-        'SELECT EXISTS(SELECT 1 FROM `cache` WHERE `key` = ?)',
-        (key,),
+            'SELECT EXISTS(SELECT 1 FROM `cache` WHERE `key` = ?)',
+        (key, ),
     ).fetchone()[0]:
         xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
             'UPDATE `cache` SET `timestamp` = ?, `value` = ? WHERE `key` = ?',
@@ -57,15 +62,20 @@ def lruCacheSet(key: str, value: bytes|None, rowLimit: int):
         )
     xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
         'DELETE FROM `cache` WHERE `id` NOT IN (SELECT `id` FROM `cache` ORDER BY `timestamp` DESC LIMIT ?)',
-        (rowLimit,),
+        (rowLimit, ),
     )
 
-def stripHTML(text: str|BeautifulSoup|Tag) -> str:
+
+def stripHTML(text: str | BeautifulSoup | Tag) -> str:
     if isinstance(text, (BeautifulSoup, Tag)):
-        return re.sub(r'^\s+|\s+$', '\n', text.text.replace('\r', ''), flags=re.M)
+        return re.sub(r'^\s+|\s+$',
+                      '\n',
+                      text.text.replace('\r', ''),
+                      flags=re.M)
     text = re.sub(r'<br ?/?>\r?\n?', '\n', text)
     text = re.sub(r'^\s+|\s+$', '\n', text, flags=re.M)
     return BeautifulSoup(text, features='lxml').text
+
 
 def parseThreadTime(text: str) -> datetime.datetime:
     return datetime.datetime.strptime(
@@ -73,21 +83,20 @@ def parseThreadTime(text: str) -> datetime.datetime:
         '%Y-%m-%d %H:%M:%S',
     )
 
+
 def floatAlert(title: str, body: str):
     b = Button('确定')
     d = Float(Dialog(
         title=title,
         body=Label(body),
-        buttons=(
-            b,
-        ),
+        buttons=(b, ),
     ))
-    b.handler = functools.partial(lambda e: (
-        xdnmb.globals.container.floats.remove(e) or
-        xdnmb.globals.layout.focus(xdnmb.globals.container)
-    ), d)
+    b.handler = functools.partial(
+        lambda e: (xdnmb.globals.container.floats.remove(e) or xdnmb.globals.
+                   layout.focus(xdnmb.globals.container)), d)
     xdnmb.globals.container.floats.append(d)
     xdnmb.globals.layout.focus(b.window)
+
 
 def floatAlertExceptionCatch(func: typing.Callable):
     @functools.wraps(func)
@@ -96,54 +105,64 @@ def floatAlertExceptionCatch(func: typing.Callable):
             return func(*args, **kwargs)
         except Exception as ex:
             floatAlert('错误', f'{type(ex).__name__}: {ex}')
+
     return wrapper
 
-def floatPrompt(title: str, body: str, callback: typing.Callable[[str], None], completer: Completer|None = None):
+
+def floatPrompt(title: str,
+                body: str,
+                callback: typing.Callable[[str], None],
+                completer: Completer | None = None):
     t = TextArea(
         multiline=False,
         completer=completer,
     )
     b0 = Button('确定')
     b1 = Button('取消')
-    d = Float(Dialog(
-        title=title,
-        body=HSplit((
-            Label(text=body, dont_extend_height=True),
-            t,
-        ), width=24),
-        buttons=(
-            b0,
-            b1,
-        ),
-    ))
-    b0.handler = functools.partial(lambda e: (
-        xdnmb.globals.container.floats.remove(e) or
-        xdnmb.globals.layout.focus(xdnmb.globals.container) or
-        callback(t.text)
-    ), d)
-    b1.handler = functools.partial(lambda e: (
-        xdnmb.globals.container.floats.remove(e) or
-        xdnmb.globals.layout.focus(xdnmb.globals.container)
-    ), d)
+    d = Float(
+        Dialog(
+            title=title,
+            body=HSplit((
+                Label(text=body, dont_extend_height=True),
+                t,
+            ),
+                        width=24),
+            buttons=(
+                b0,
+                b1,
+            ),
+        ))
+    b0.handler = functools.partial(
+        lambda e: (xdnmb.globals.container.floats.remove(e) or xdnmb.globals.
+                   layout.focus(xdnmb.globals.container) or callback(t.text)),
+        d)
+    b1.handler = functools.partial(
+        lambda e: (xdnmb.globals.container.floats.remove(e) or xdnmb.globals.
+                   layout.focus(xdnmb.globals.container)), d)
     xdnmb.globals.container.floats.append(d)
     xdnmb.globals.layout.focus(t.window)
 
-def focusToButton(focusFrom: xdnmb.model.ButtonType|None, focusTo: xdnmb.model.ButtonType) -> bool:
+
+def focusToButton(focusFrom: xdnmb.model.ButtonType | None,
+                  focusTo: xdnmb.model.ButtonType) -> bool:
     focused = xdnmb.globals.layout.current_window
     try:
-        if focusFrom is None or focusFrom == getattr(focused, 'buttonType', xdnmb.model.ButtonType.Dummy):
-            xdnmb.globals.layout.focus(next(
-                button
-                for button in xdnmb.globals.layout.get_visible_focusable_windows()
-                if getattr(button, 'buttonType', xdnmb.model.ButtonType.Dummy) == focusTo
-            ))
+        if focusFrom is None or focusFrom == getattr(
+                focused, 'buttonType', xdnmb.model.ButtonType.Dummy):
+            xdnmb.globals.layout.focus(
+                next(button for button in
+                     xdnmb.globals.layout.get_visible_focusable_windows()
+                     if getattr(button, 'buttonType',
+                                xdnmb.model.ButtonType.Dummy) == focusTo))
             return True
     except StopIteration:
         pass
     return False
 
+
 # Chafa: Terminal Graphics for the 21st Century
 # https://hpjansson.org/chafa/
+
 
 @functools.cache
 def detectChafa() -> bool:
@@ -157,6 +176,7 @@ def detectChafa() -> bool:
     except FileNotFoundError:
         return False
 
+
 @functools.lru_cache(256)
 def loadChafaImage(url: str, width: int, height: int) -> str:
     cacheKey = ':'.join((url, str(width), str(height)))
@@ -167,10 +187,14 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
     temp = os.path.join(tempfile.gettempdir(), secrets.token_urlsafe(12))
     cmd = (
         'chafa',
-        '--duration', str(0),
-        '--optimize', str(9),
-        '--size', f'{width}x{height}',
-        '--work', str(9),
+        '--duration',
+        str(0),
+        '--optimize',
+        str(9),
+        '--size',
+        f'{width}x{height}',
+        '--work',
+        str(9),
         temp if os.name == 'nt' else '-',
     )
     with xdnmb.api.session.get(url, stream=True, timeout=3) as r:
@@ -179,10 +203,12 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
                 for chunk in r.iter_content(8192):
                     f.write(chunk)
         with subprocess.Popen(
-            cmd,
-            stdin=subprocess.DEVNULL if os.name == 'nt' else subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
+                cmd,
+                stdin=subprocess.DEVNULL
+                if os.name == 'nt' else subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                creationflags=subprocess.CREATE_NO_WINDOW
+                if os.name == 'nt' else 0,
         ) as p:
             if os.name != 'nt':
                 for chunk in r.iter_content(8192):
@@ -193,6 +219,7 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
             os.remove(temp)
     if p.returncode:
         raise subprocess.CalledProcessError(p.returncode, cmd)
-    result = re.split(r'\033\[\d*A', result.decode('utf-8'), 1)[0].replace('\r', '').strip()
+    result = re.split(r'\033\[\d*A', result.decode('utf-8'),
+                      1)[0].replace('\r', '').strip()
     lruCacheSet(cacheKey, gzip.compress(result.encode('utf-8'), 9), 16384)
     return result
