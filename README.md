@@ -81,6 +81,8 @@ hidecookie = False
 # 只看PO
 # 不会影响Tips的出现
 poonly = False
+# 不在主页上显示公告
+ignorenotice = False
 ```
 
 ## 其他
@@ -89,4 +91,4 @@ poonly = False
 * 本项目包含了“凉宫 Tips 娘表情包”的下载链接。凉宫 Tips 娘人物形象原作者为饼干为“iVUmXcE”的肥肥（[No.50666176](https://nmbxd.com/t/50666176)），表情包由饼干为“9QybryU”的肥肥制作（[No.51412777](https://nmbxd.com/t/51412777)）。
 * 虽然本项目的开源性质决定了任何人都可以自由地使用、修改和分发本项目的源代码，但原作者个人仍然会强烈反对和谴责尝试将本项目的源代码用于适配“阿苇岛匿名版”的行为。
 * 加载过的缩略图缓存保存位置为 `$XDG_CACHE_HOME/xdcmd/lru-cache.db`，其中 `$XDG_CACHE_HOME` 的默认值为 `~/.cache`。
-* 可以参考的 X 岛匿名版 API 相关资料：三酱提供的[原版 API 文档](https://www.zybuluo.com/ovear/note/151481)、紫岛源代码中[构建 URL](https://github.com/seven332/Nimingban/blob/master/app/src/main/java/com/hippo/nimingban/client/ac/ACUrl.java) 和[调用 API](https://github.com/seven332/Nimingban/blob/master/app/src/main/java/com/hippo/nimingban/client/ac/ACEngine.java) 的相关代码。
+* 如果你有兴趣的话，可以在 [Wiki](https://github.com/TransparentLC/xdcmd/wiki/%E8%87%AA%E5%B7%B1%E6%95%B4%E7%90%86%E7%9A%84-X-%E5%B2%9B%E5%8C%BF%E5%90%8D%E7%89%88-API-%E6%96%87%E6%A1%A3) 中查看原作者自己整理的 X 岛匿名版 API 文档。

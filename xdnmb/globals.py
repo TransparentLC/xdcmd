@@ -98,6 +98,7 @@ config['DEFAULT'] = {
     'HideTips': False,
     'HideCookie': False,
     'PoOnly': False,
+    'IgnoreNotice': False,
 }
 config['Config'] = {}
 configLoaded = False
@@ -434,7 +435,7 @@ thread: xdnmb.model.Thread = None
 threadPage: int = None
 showReplyForm = False
 
-homepageLabel = Label(text=(
+homepageLabelText = (
     '\n'
     '久等了，欢迎回来\n'
     '\n'
@@ -450,7 +451,13 @@ homepageLabel = Label(text=(
     '\n'
     'X岛匿名版命令行客户端 XDCMD by TransparentLC\n'
     'https://github.com/TransparentLC/xdcmd\n'
-), align=WindowAlign.CENTER)
+)
+try:
+    if not config['Config'].getboolean('IgnoreNotice'):
+        homepageLabelText += '\n== 公告 ==\n\n' + xdnmb.util.stripHTML(xdnmb.api.session.get('https://nmb.ovear.info/nmb-notice.json').json()['content'])
+except:
+    pass
+homepageLabel = Label(text=homepageLabelText, align=WindowAlign.CENTER)
 forumBottomButton = Button('按 PgUp/PgDn 翻页')
 
 @xdnmb.util.floatAlertExceptionCatch
