@@ -3,6 +3,7 @@ import argparse
 import configparser
 import functools
 import os
+import re
 import sqlite3
 import sys
 import typing
@@ -642,6 +643,7 @@ container = FloatContainer(
                 ('Alt+N', '发串/回复'),
                 ('Alt+M', '查看版规'),
                 ('Alt+L', '查看引用'),
+                ('Alt+K', '举报'),
                 ('Tab', '将光标指向版面/串/悬浮窗按钮'),
             )
         )),
@@ -815,6 +817,61 @@ def _(e: KeyPressEvent):
         layout.focus(replyContentTextarea)
     else:
         xdnmb.util.focusToButton(None, xdnmb.model.ButtonType.Forum)
+
+@keyBinding.add('escape', 'k')
+@xdnmb.util.floatAlertExceptionCatch
+def _(e: KeyPressEvent):
+    if showReplyForm:
+        return
+    tid: int = None
+    for c in e.app.layout.current_window.content.text():
+        if c[0] == 'class:button.text' and re.match(r'^No\.\d+$', c[1]):
+            tid = int(re.match(r'^No\.(\d+)$', c[1]).group(1))
+            break
+    if tid is None:
+        return
+
+    watchroom: xdnmb.model.Forum = None
+    for f in forums:
+        if f.name == '值班室':
+            watchroom = f
+            break
+    if watchroom is None:
+        xdnmb.util.floatAlert('错误', '找不到值班室 (*ﾟーﾟ)')
+        return
+
+    @xdnmb.util.floatAlertExceptionCatch
+    def callback(s: str):
+        s = s.strip()
+        if not s:
+            xdnmb.util.floatAlert('举报', '举报理由不能为空')
+            return
+        xdnmb.api.postThread(
+            watchroom,
+            '',
+            '',
+            f'>>No.{tid}\n{s}',
+            None,
+            False,
+        )
+        xdnmb.util.floatAlert('举报', '举报成功，请等待红名处理')
+
+    xdnmb.util.floatPrompt(
+        '举报',
+        f'请输入对No.{tid}的举报理由：\n（输入“举报理由”可以使用自动补全）',
+        callback,
+        WordCompleter((
+            '举报理由：黄赌毒',
+            '举报理由：政治敏感',
+            '举报理由：谣言欺诈',
+            '举报理由：广告Q群',
+            '举报理由：引战辱骂',
+            '举报理由：串版',
+            '举报理由：风怒自删',
+            '举报理由：错字自删',
+            '举报理由：错饼自删',
+        )),
+    )
 
 @keyBinding.add('escape', '=')
 @xdnmb.util.floatAlertExceptionCatch
