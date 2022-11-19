@@ -165,14 +165,19 @@ def focusToButton(focusFrom: xdnmb.model.ButtonType | None,
 
 
 @functools.cache
-def detectChafa() -> bool:
+def detectChafa() -> tuple[int, int, int] | None:
     try:
         p = subprocess.Popen(
             ('chafa', '--version'),
-            stdout=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
         )
-        return p.wait() == 0
+        p.wait()
+        if p.returncode:
+            return None
+        else:
+            s = re.search(r'^Chafa version (\d+).(\d+).(\d+)$', p.stdout.readline().decode('utf-8'))
+            return (int(s.group(1)), int(s.group(2)), int(s.group(3)))
     except FileNotFoundError:
         return False
 
@@ -184,6 +189,11 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
     if cached:
         return gzip.decompress(cached).decode('utf-8')
 
+    # Reading image data from stdin raises "Failed to open '-': Unknown file format" error on Windows build · Issue #100 · hpjansson/chafa
+    # https://github.com/hpjansson/chafa/issues/100
+    # Fixed in Chafa 1.12.4
+    # https://github.com/hpjansson/chafa/releases/tag/1.12.4
+    useTemp: bool = os.name == 'nt' and detectChafa() < (1, 12, 4)
     temp = os.path.join(tempfile.gettempdir(), secrets.token_urlsafe(12))
     cmd = (
         'chafa',
@@ -195,31 +205,28 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
         f'{width}x{height}',
         '--work',
         str(9),
-        temp if os.name == 'nt' else '-',
+        temp if useTemp else '-',
     )
     with xdnmb.api.session.get(url, stream=True, timeout=3) as r:
-        if os.name == 'nt':
+        if useTemp:
             with open(temp, 'wb') as f:
                 for chunk in r.iter_content(8192):
                     f.write(chunk)
         with subprocess.Popen(
-                cmd,
-                stdin=subprocess.DEVNULL
-                if os.name == 'nt' else subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                creationflags=subprocess.CREATE_NO_WINDOW
-                if os.name == 'nt' else 0,
+            cmd,
+            stdin=subprocess.DEVNULL if useTemp else subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
         ) as p:
-            if os.name != 'nt':
+            if not useTemp:
                 for chunk in r.iter_content(8192):
                     p.stdin.write(chunk)
                 p.stdin.close()
             result = p.stdout.read()
-        if os.name == 'nt':
+        if useTemp:
             os.remove(temp)
     if p.returncode:
         raise subprocess.CalledProcessError(p.returncode, cmd)
-    result = re.split(r'\033\[\d*A', result.decode('utf-8'),
-                      1)[0].replace('\r', '').strip()
+    result = re.split(r'\033\[\d*A', result.decode('utf-8'), 1)[0].replace('\r', '').strip()
     lruCacheSet(cacheKey, gzip.compress(result.encode('utf-8'), 9), 16384)
     return result
