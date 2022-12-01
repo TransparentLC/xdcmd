@@ -21,6 +21,7 @@
   * Windows：`(echo @echo off & echo python /path/to/xdcmd/main.py %*) > %SystemRoot%\xdcmd.cmd`
   * Linux：`(echo '#!/bin/sh\npython3 /path/to/xdcmd/main.py "$@"' > /usr/local/bin/xdcmd) && chmod +x /usr/local/bin/xdcmd`
 * 如果你是 Arch Linux 用户，也可以使用 `yay -S xdao` 安装，之后在终端输入 `xdao` 就可以启动了。感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
+* 如果你是 Windows 用户，也可以在[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载打包好的可执行文件，其中 `onefile` 为单个可执行文件版。
 * 建议搭配等宽字体使用。对于 Windows 用户，建议通过 [Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701) 使用这个客户端，在传统的终端下使用可能会存在一些问题。
 
 ## 使用截图
