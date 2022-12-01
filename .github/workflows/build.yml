@@ -13,9 +13,9 @@ jobs:
       PYTHONIOENCODING: utf-8
       PYTHONOPTIMIZE: 1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
           cache: pip
@@ -33,9 +33,20 @@ jobs:
           pip install -U nuitka zstandard ordered-set
       - name: Build executable
         run: |
-          nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd main.py
+          nuitka --standalone --assume-yes-for-downloads main.py
+          mv main.dist/main.exe main.dist/xdcmd.exe
       - name: Upload result
         uses: actions/upload-artifact@v3
         with:
-          name: xdcmd
+          if-no-files-found: error
+          name: xdcmd-windows
+          path: main.dist
+      - name: Build executable (onefile)
+        run: |
+          nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd.exe main.py
+      - name: Upload result (onefile)
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xdcmd-windows-onefile
           path: xdcmd.exe
