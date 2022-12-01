@@ -35,6 +35,15 @@ jobs:
         run: |
           nuitka --standalone --assume-yes-for-downloads main.py
           mv main.dist/main.exe main.dist/xdcmd.exe
+          rm main.dist/api-ms-win-*.dll
+          rm main.dist/_bz2.pyd
+          rm main.dist/_decimal.pyd
+          rm main.dist/_elementtree.pyd
+          rm main.dist/_hashlib.pyd
+          rm main.dist/_lzma.pyd
+          rm main.dist/_queue.pyd
+          rm main.dist/_uuid.pyd
+          rm main.dist/ucrtbase.dll
       - name: Upload result
         uses: actions/upload-artifact@v3
         with:
