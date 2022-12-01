@@ -74,7 +74,7 @@ def stripHTML(text: str | BeautifulSoup | Tag) -> str:
                       flags=re.M)
     text = re.sub(r'<br ?/?>\r?\n?', '\n', text)
     text = re.sub(r'^\s+|\s+$', '\n', text, flags=re.M)
-    return BeautifulSoup(text, features='lxml').text
+    return BeautifulSoup(text, features='html.parser').text
 
 
 def parseThreadTime(text: str) -> datetime.datetime:

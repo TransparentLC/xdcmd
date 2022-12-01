@@ -221,7 +221,7 @@ def postThread(
         if water:
             f['water'] = (None, 'true')
     r = session.post(urljoin(HTML_API_ENDPOINT, c), files=f)
-    soup = BeautifulSoup(r.text, features='lxml')
+    soup = BeautifulSoup(r.text, features='html.parser')
     errorNode = soup.select_one('.error')
     if errorNode:
         raise Exception(xdnmb.util.stripHTML(errorNode))
@@ -270,7 +270,7 @@ def addFeed(thread: xdnmb.model.Thread):
         if 'application/json' in r.headers['Content-Type']:
             raise Exception(r.json())
         elif 'text/html' in r.headers['Content-Type']:
-            raise Exception(xdnmb.util.stripHTML(BeautifulSoup(r.text, features='lxml').select_one('.error')))
+            raise Exception(xdnmb.util.stripHTML(BeautifulSoup(r.text, features='html.parser').select_one('.error')))
         else:
             raise Exception(r.text)
 
@@ -283,6 +283,6 @@ def delFeed(thread: xdnmb.model.Thread):
         if 'application/json' in r.headers['Content-Type']:
             raise Exception(r.json())
         elif 'text/html' in r.headers['Content-Type']:
-            raise Exception(xdnmb.util.stripHTML(BeautifulSoup(r.text, features='lxml').select_one('.error')))
+            raise Exception(xdnmb.util.stripHTML(BeautifulSoup(r.text, features='html.parser').select_one('.error')))
         else:
             raise Exception(r.text)
