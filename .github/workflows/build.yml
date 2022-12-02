@@ -50,6 +50,19 @@ jobs:
           if-no-files-found: error
           name: xdcmd-windows
           path: main.dist
+      - name: Setup UPX
+        run: choco install --no-progress upx
+      - name: Compress with UPX
+        run: |
+          foreach ($f in (Get-ChildItem -Include ("*.pyd", "*.dll", "*.exe") -Exclude "vcruntime140.dll" -Recurse "main.dist")) {
+            upx --ultra-brute --no-progress $f.FullName
+          }
+      - name: Upload result (upx)
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xdcmd-windows-upx
+          path: main.dist
       - name: Build executable (onefile)
         run: |
           nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd.exe main.py
