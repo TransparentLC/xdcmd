@@ -36,6 +36,7 @@ jobs:
           nuitka --standalone --assume-yes-for-downloads main.py
           mv main.dist/main.exe main.dist/xdcmd.exe
           rm main.dist/api-ms-win-*.dll
+          rm main.dist/ucrtbase.dll
           rm main.dist/_bz2.pyd
           rm main.dist/_decimal.pyd
           rm main.dist/_elementtree.pyd
@@ -43,7 +44,7 @@ jobs:
           rm main.dist/_lzma.pyd
           rm main.dist/_queue.pyd
           rm main.dist/_uuid.pyd
-          rm main.dist/ucrtbase.dll
+          cp README.md main.dist/README.md
       - name: Upload result
         uses: actions/upload-artifact@v3
         with:
@@ -71,4 +72,6 @@ jobs:
         with:
           if-no-files-found: error
           name: xdcmd-windows-onefile
-          path: xdcmd.exe
+          path: |
+            xdcmd.exe
+            README.md

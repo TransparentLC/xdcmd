@@ -1,10 +1,18 @@
 # xdcmd
 
-[![AUR version](https://img.shields.io/aur/version/xdao)](https://aur.archlinux.org/packages/xdao)
+[![AUR version](https://img.shields.io/aur/version/xdao)](https://aur.archlinux.org/packages/xdao) [![build](https://github.com/TransparentLC/xdcmd/actions/workflows/build.yml/badge.svg)](https://github.com/TransparentLC/xdcmd/actions/workflows/build.yml)
 
 [X 岛匿名版](https://nmbxd.com/)命令行客户端。
 
 用户反馈和技术支持集中串：[No.50750950](https://nmbxd.com/t/50750950)
+
+快速安装：
+
+* ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-333?logo=archlinux) `yay -S xdao` 感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
+* ![Windows 10+](https://img.shields.io/badge/Windows-10+-06b?logo=windows) 使用 GitHub Actions 自动打包成可执行文件，可以从[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载。
+    * `xdcmd-windows` 原始的打包产物。
+    * `xdcmd-windows-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
+    * `xdcmd-windows-upx` 将打包产物使用 [UPX](https://upx.github.io/) 压缩后的版本，**不知道该下载哪个的话就选这个吧**。
 
 ![](https://user-images.githubusercontent.com/47057319/182030427-6c75ec92-f808-4cbc-8102-2c868db33093.png)
 
@@ -20,8 +28,6 @@
 * 你也可以手动在 `PATH` 下创建一个用于快速启动的脚本。例如，想要在终端输入 `xdcmd` 直接启动此项目：
   * Windows：`(echo @echo off & echo python /path/to/xdcmd/main.py %*) > %SystemRoot%\xdcmd.cmd`
   * Linux：`(echo '#!/bin/sh\npython3 /path/to/xdcmd/main.py "$@"' > /usr/local/bin/xdcmd) && chmod +x /usr/local/bin/xdcmd`
-* 如果你是 Arch Linux 用户，也可以使用 `yay -S xdao` 安装，之后在终端输入 `xdao` 就可以启动了。感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
-* 如果你是 Windows 用户，也可以在[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载打包好的可执行文件，其中 `onefile` 为单个可执行文件版。
 * 建议搭配等宽字体使用。对于 Windows 用户，建议通过 [Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701) 使用这个客户端，在传统的终端下使用可能会存在一些问题。
 
 ## 使用截图
