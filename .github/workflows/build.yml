@@ -116,13 +116,15 @@ jobs:
           path: xdcmd-ubuntu.tar.xz
       - name: Build executable (onefile)
         run: |
-          nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd main.py
-          chmod +x xdcmd
+          python3 -m nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd main.py
+          mkdir xdcmd-ubuntu-onefile
+          mv xdcmd xdcmd-ubuntu-onefile/xdcmd
+          chmod +x xdcmd-ubuntu-onefile/xdcmd
+          cp README.md xdcmd-ubuntu-onefile/README.md
+          XZ_OPT=-9e tar Jcf xdcmd-ubuntu-onefile.tar.xz xdcmd-ubuntu-onefile
       - name: Upload result (onefile)
         uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
           name: xdcmd-ubuntu-onefile
-          path: |
-            xdcmd
-            README.md
+          path: xdcmd-ubuntu-onefile.tar.xz
