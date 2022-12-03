@@ -101,7 +101,7 @@ jobs:
           sudo apt install patchelf ccache
       - name: Build executable
         run: |
-          echo VERSION = \"$(git rev-parse HEAD)\" > xdnmb/version.py
+          echo COMMIT_HASH = \"$(git rev-parse HEAD)\" > xdnmb/version.py
           python3 -m nuitka --standalone --assume-yes-for-downloads main.py
           mv main.dist/main main.dist/xdcmd
           chmod +x main.dist/xdcmd
