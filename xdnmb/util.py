@@ -170,13 +170,15 @@ def detectChafa() -> tuple[int, int, int] | None:
         p = subprocess.Popen(
             ('chafa', '--version'),
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
         )
         p.wait()
         if p.returncode:
             return None
         else:
             s = re.search(r'^Chafa version (\d+).(\d+).(\d+)$', p.stdout.readline().decode('utf-8'))
+            if s is None:
+                s = re.search(r'^Chafa version (\d+).(\d+).(\d+)$', p.stderr.readline().decode('utf-8'))
             return (int(s.group(1)), int(s.group(2)), int(s.group(3)))
     except FileNotFoundError:
         return False
