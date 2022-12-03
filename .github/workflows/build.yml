@@ -33,6 +33,7 @@ jobs:
           pip install -U nuitka zstandard ordered-set
       - name: Build executable
         run: |
+          'COMMIT_HASH = "' + (git rev-parse HEAD) + '"' | Out-File -Encoding ascii xdnmb/version.py
           nuitka --standalone --assume-yes-for-downloads main.py
           mv main.dist/main.exe main.dist/xdcmd.exe
           rm main.dist/api-ms-win-*.dll
@@ -74,4 +75,54 @@ jobs:
           name: xdcmd-windows-onefile
           path: |
             xdcmd.exe
+            README.md
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONIOENCODING: utf-8
+      PYTHONOPTIMIZE: 1
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Cache nuitka dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Nuitka
+          key: ubuntu-nuitka
+      - name: Install pip dependencies
+        run: |
+          pip install -U -r requirements.txt
+          pip install -U nuitka zstandard ordered-set
+          apt install patchelf ccache
+      - name: Build executable
+        run: |
+          echo VERSION = \"$(git rev-parse HEAD)\" > xdnmb/version.py
+          python3 -m nuitka --standalone --assume-yes-for-downloads main.py
+          mv main.dist/main main.dist/xdcmd
+          chmod +x main.dist/xdcmd
+          cp README.md main.dist/README.md
+          mv main.dist xdcmd-ubuntu
+          XZ_OPT=-9e tar Jcf xdcmd-ubuntu.tar.xz xdcmd-ubuntu
+      - name: Upload result
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xdcmd-ubuntu
+          path: xdcmd-ubuntu.tar.xz
+      - name: Build executable (onefile)
+        run: |
+          nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd main.py
+          chmod +x xdcmd
+      - name: Upload result (onefile)
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xdcmd-ubuntu-onefile
+          path: |
+            xdcmd
             README.md

@@ -42,6 +42,11 @@ from prompt_toolkit.widgets import Frame
 from prompt_toolkit.widgets import Label
 from prompt_toolkit.widgets import TextArea
 
+try:
+    from xdnmb.version import COMMIT_HASH
+except ImportError:
+    COMMIT_HASH = None
+
 BASE_PATH: str = os.path.realpath(sys._MEIPASS if hasattr(sys, '_MEIPASS') else '')
 APP_PATH = os.path.dirname(os.path.realpath(sys.executable if hasattr(sys, '_MEIPASS') else sys.argv[0]))
 XDG_CONFIG_PATH = os.path.join(
@@ -450,7 +455,7 @@ homepageLabelText = (
     '“开放包容 理性客观 有事说事 就事论事 顺猴者昌 逆猴者亡”\n'
     '免责声明：本站无法保证用户张贴内容的可靠性，投资有风险，健康问题请遵医嘱。\n'
     '\n'
-    'X岛匿名版命令行客户端 XDCMD by TransparentLC\n'
+    f'X岛匿名版命令行客户端 XDCMD by TransparentLC{f" (Commit: {COMMIT_HASH[:7]})" if COMMIT_HASH else ""}\n'
     'https://github.com/TransparentLC/xdcmd\n'
 )
 try:
