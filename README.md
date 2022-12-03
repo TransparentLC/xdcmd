@@ -8,11 +8,15 @@
 
 快速安装：
 
-* ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-333?logo=archlinux) `yay -S xdao` 感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
+* ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-333?logo=archlinux) `yay -S xdao`
+  * 感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
 * ![Windows 10+](https://img.shields.io/badge/Windows-10+-06b?logo=windows) 使用 GitHub Actions 自动打包成可执行文件，可以从[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载。
-    * `xdcmd-windows` 原始的打包产物。
-    * `xdcmd-windows-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
-    * `xdcmd-windows-upx` 将打包产物使用 [UPX](https://upx.github.io/) 压缩后的版本，**不知道该下载哪个的话就选这个吧**。
+  * `xdcmd-windows` 原始的打包产物。
+  * `xdcmd-windows-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
+  * `xdcmd-windows-upx` 将打包产物使用 [UPX](https://upx.github.io/) 压缩后的版本，**不知道该下载哪个的话就选这个吧**。
+* ![Ubuntu 22.04+](https://img.shields.io/badge/Ubuntu-22.04+-e52?logo=ubuntu) 使用 GitHub Actions 自动打包成可执行文件，可以从[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载。
+    * `xdcmd-ubuntu` 原始的打包产物，**不知道该下载哪个的话就选这个吧**。
+    * `xdcmd-ubuntu-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
 
 ![](https://user-images.githubusercontent.com/47057319/182030427-6c75ec92-f808-4cbc-8102-2c868db33093.png)
 
