@@ -137,7 +137,6 @@ jobs:
           rm main.dist/readline.so
           rm main.dist/_sha512.so
           rm main.dist/_statistics.so
-          rm main.dist/termios.so
           rm main.dist/_uuid.so
           cp README.md main.dist/README.md
           mv main.dist xdcmd-ubuntu
