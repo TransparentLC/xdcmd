@@ -8,15 +8,25 @@
 
 快速安装：
 
-* ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-333?logo=archlinux) `yay -S xdao`
+* ![Arch Linux (Arch User Repository)](https://img.shields.io/badge/Arch%20Linux%20(Arch%20User%20Repository)-333?logo=archlinux) `yay -S xdao`
   * 感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
 * ![Windows 10+](https://img.shields.io/badge/Windows-10+-06b?logo=windows) 使用 GitHub Actions 自动打包成可执行文件，可以从[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载。
   * `xdcmd-windows` 原始的打包产物。
   * `xdcmd-windows-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
   * `xdcmd-windows-upx` 将打包产物使用 [UPX](https://upx.github.io/) 压缩后的版本，**不知道该下载哪个的话就选这个吧**。
-* ![Ubuntu 22.04+](https://img.shields.io/badge/Ubuntu-22.04+-e52?logo=ubuntu) 使用 GitHub Actions 自动打包成可执行文件，可以从[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载。
-    * `xdcmd-ubuntu` 原始的打包产物，**不知道该下载哪个的话就选这个吧**。
-    * `xdcmd-ubuntu-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
+* ![Linux with glibc >= 2.35](https://img.shields.io/badge/Linux-glibc%20%3E=%202.35-fc0?logo=linux) 使用 GitHub Actions 自动打包成可执行文件，可以从[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载。
+  * 虽然名字里写的是 `ubuntu`（因为是在 Ubuntu 22.04 下打包的），但是 glibc 版本不低于 2.35 的 Linux 发行版应该都可以运行。
+    * 测试过可以运行的发行版：
+      * ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-333?logo=archlinux)
+      * ![Fedora 37+](https://img.shields.io/badge/Fedora-37+-5ad?logo=fedora)
+      * ![Ubuntu 22.04+](https://img.shields.io/badge/Ubuntu-22.04+-e52?logo=ubuntu)
+      * ![Manjaro 21.3+](https://img.shields.io/badge/Manjaro-21.3+-3ba?logo=manjaro)
+    * 测试过（由于 glibc 版本不够）不能运行的发行版：
+      * ![CentOS 7](https://img.shields.io/badge/CentOS-7-958?logo=centos)
+      * ![Debian 11](https://img.shields.io/badge/Debian-11-a03?logo=debian)
+      * ![RockyLinux 9](https://img.shields.io/badge/RockyLinux-9-1b8?logo=rockylinux)
+  * `xdcmd-ubuntu` 原始的打包产物，**不知道该下载哪个的话就选这个吧**。
+  * `xdcmd-ubuntu-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
 
 ![](https://user-images.githubusercontent.com/47057319/182030427-6c75ec92-f808-4cbc-8102-2c868db33093.png)
 
