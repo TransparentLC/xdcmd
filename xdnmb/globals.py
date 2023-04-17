@@ -1,4 +1,3 @@
-from __future__ import annotations
 import argparse
 import configparser
 import functools
@@ -460,7 +459,9 @@ homepageLabelText = (
 )
 try:
     if not config['Config'].getboolean('IgnoreNotice'):
-        homepageLabelText += '\n== 公告 ==\n\n' + xdnmb.util.stripHTML(xdnmb.api.session.get('https://nmb.ovear.info/nmb-notice.json').json()['content'])
+        notice = xdnmb.api.session.get('https://nmb.ovear.info/nmb-notice.json').json()
+        if notice['enable']:
+            homepageLabelText += f'\n== 公告 ==\n{str(notice["date"])[0:4]}-{str(notice["date"])[4:6]}-{str(notice["date"])[6:8]}\n\n{xdnmb.util.stripHTML(notice["content"])}'
 except:
     pass
 homepageLabel = Label(text=homepageLabelText, align=WindowAlign.CENTER)
