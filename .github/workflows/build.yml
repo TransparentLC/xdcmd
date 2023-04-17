@@ -103,7 +103,7 @@ jobs:
         run: |
           echo COMMIT_HASH = \"$(git rev-parse HEAD)\" > xdnmb/version.py
           python3 -m nuitka --standalone --assume-yes-for-downloads main.py
-          mv main.dist/main main.dist/xdcmd
+          mv main.dist/main.bin main.dist/xdcmd
           chmod +x main.dist/xdcmd
           rm main.dist/audioop.so
           rm main.dist/_bisect.so
