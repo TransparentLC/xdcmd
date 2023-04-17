@@ -26,10 +26,7 @@ from prompt_toolkit.widgets import Dialog
 from prompt_toolkit.widgets import Label
 from prompt_toolkit.widgets import TextArea
 
-warnings.filterwarnings('ignore',
-                        category=MarkupResemblesLocatorWarning,
-                        module='bs4')
-
+warnings.filterwarnings('ignore', category=MarkupResemblesLocatorWarning)
 
 def lruCacheGet(key: str) -> bytes | None:
     row = xdnmb.globals.LRU_CACHE_DB_CURSOR.execute(
