@@ -86,8 +86,7 @@ feeduuid = C7hswJmRY1eHo6FfCqJbmWgva8D3vAI6
 # 使用单色模式
 monochrome = False
 # 显示缩略图
-# 此功能依赖于chafa（https://hpjansson.org/chafa/），需要自行使用包管理器安装，或下载可执行文件并放在PATH环境变量包含的路径下
-# 在单色模式下也不会显示缩略图
+# 在单色模式下即使这一项设为True也不会显示缩略图
 # 需要额外的时间加载图片，如果介意拖慢速度的话可以关闭此功能
 imagepreview = True
 # 缩略图的最大宽度
