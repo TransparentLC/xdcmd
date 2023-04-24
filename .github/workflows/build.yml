@@ -36,15 +36,15 @@ jobs:
           'COMMIT_HASH = "' + (git rev-parse HEAD) + '"' | Out-File -Encoding ascii xdnmb/version.py
           nuitka --standalone --assume-yes-for-downloads main.py
           mv main.dist/main.exe main.dist/xdcmd.exe
-          rm main.dist/api-ms-win-*.dll
-          rm main.dist/ucrtbase.dll
-          rm main.dist/_bz2.pyd
-          rm main.dist/_decimal.pyd
-          rm main.dist/_elementtree.pyd
-          rm main.dist/_hashlib.pyd
-          rm main.dist/_lzma.pyd
-          rm main.dist/_queue.pyd
-          rm main.dist/_uuid.pyd
+          rm -f main.dist/api-ms-win-*.dll
+          rm -f main.dist/ucrtbase.dll
+          rm -f main.dist/_bz2.pyd
+          rm -f main.dist/_decimal.pyd
+          rm -f main.dist/_elementtree.pyd
+          rm -f main.dist/_hashlib.pyd
+          rm -f main.dist/_lzma.pyd
+          rm -f main.dist/_queue.pyd
+          rm -f main.dist/_uuid.pyd
           cp README.md main.dist/README.md
       - name: Upload result
         uses: actions/upload-artifact@v3
@@ -105,39 +105,52 @@ jobs:
           python3 -m nuitka --standalone --assume-yes-for-downloads main.py
           mv main.dist/main.bin main.dist/xdcmd
           chmod +x main.dist/xdcmd
-          rm main.dist/audioop.so
-          rm main.dist/_bisect.so
-          rm main.dist/_bz2.so
-          rm main.dist/_codecs_*.so
-          rm main.dist/_crypt.so
-          rm main.dist/_csv.so
-          rm main.dist/_ctypes.so
-          rm main.dist/_datetime.so
-          rm main.dist/_dbm.so
-          rm main.dist/_decimal.so
-          rm main.dist/_elementtree.so
-          rm main.dist/fcntl.so
-          rm main.dist/grp.so
-          rm main.dist/_heapq.so
-          rm main.dist/libbz2.so.*
-          rm main.dist/libffi.so.*
-          rm main.dist/libgdbm.so.*
-          rm main.dist/libgdbm_compat.so.*
-          rm main.dist/liblzma.so.*
-          rm main.dist/libreadline.so.*
-          rm main.dist/libtinfo.so.*
-          rm main.dist/libuuid.so.*
-          rm main.dist/_lzma.so
-          rm main.dist/mmap.so
-          rm main.dist/_multiprocessing.so
-          rm main.dist/_opcode.so
-          rm main.dist/_pickle.so
-          rm main.dist/_posixshmem.so
-          rm main.dist/_queue.so
-          rm main.dist/readline.so
-          rm main.dist/_sha512.so
-          rm main.dist/_statistics.so
-          rm main.dist/_uuid.so
+          rm -f main.dist/_asyncio.so
+          rm -f main.dist/_bisect.so
+          rm -f main.dist/_bz2.so
+          rm -f main.dist/_codecs_*.so
+          rm -f main.dist/_crypt.so
+          rm -f main.dist/_csv.so
+          rm -f main.dist/_cffi_backend.so
+          rm -f main.dist/_datetime.so
+          rm -f main.dist/_dbm.so
+          rm -f main.dist/_decimal.so
+          rm -f main.dist/_elementtree.so
+          rm -f main.dist/_hashlib.so
+          rm -f main.dist/_heapq.so
+          rm -f main.dist/_lzma.so
+          rm -f main.dist/_multibytecodec.so
+          rm -f main.dist/_multiprocessing.so
+          rm -f main.dist/_opcode.so
+          rm -f main.dist/_pickle.so
+          rm -f main.dist/_posixshmem.so
+          rm -f main.dist/_queue.so
+          rm -f main.dist/_sha512.so
+          rm -f main.dist/_statistics.so
+          rm -f main.dist/_uuid.so
+          rm -f main.dist/_zoneinfo.so
+          rm -f main.dist/audioop.so
+          rm -f main.dist/fcntl.so
+          rm -f main.dist/grp.so
+          rm -f main.dist/libbz2.so.*
+          rm -f main.dist/libcrypto.so.*
+          rm -f main.dist/libdb-*.so.*
+          rm -f main.dist/libffi.so.*
+          rm -f main.dist/libgcc_s.so.*
+          rm -f main.dist/libgdbm.so.*
+          rm -f main.dist/libgdbm_compat.so.*
+          rm -f main.dist/liblzma.so.*
+          rm -f main.dist/libmpdec.so.*
+          rm -f main.dist/libreadline.so.*
+          rm -f main.dist/libssl.so.*
+          rm -f main.dist/libtinfo.so.*
+          rm -f main.dist/libuuid.so.*
+          rm -f main.dist/mmap.so
+          rm -f main.dist/readline.so
+          rm -rf main.dist/bcrypt
+          rm -rf main.dist/cryptography
+          rm -rf main.dist/lxml
+          rm -rf main.dist/orjson
           cp README.md main.dist/README.md
           mv main.dist xdcmd-ubuntu
           XZ_OPT=-9e tar Jcf xdcmd-ubuntu.tar.xz xdcmd-ubuntu
