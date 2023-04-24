@@ -104,7 +104,7 @@ jobs:
       - name: Build executable
         run: |
           echo COMMIT_HASH = \"$(git rev-parse HEAD)\" > xdnmb/version.py
-          python3 -m nuitka --standalone --assume-yes-for-downloads main.py
+          python3 -m nuitka --standalone --assume-yes-for-downloads --user-package-configuration-file=chafa.yml main.py
           mv main.dist/main.bin main.dist/xdcmd
           chmod +x main.dist/xdcmd
           rm -f main.dist/_asyncio.so

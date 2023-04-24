@@ -5,5 +5,12 @@
         prefixes:
           - lib
         suffixes:
-          - pyd
-      when: win32 and arch_amd64
+          - dll
+      when: win32
+    - from_filenames:
+        relative_path: libs
+        prefixes:
+          - lib
+        suffixes:
+          - so
+      when: linux
