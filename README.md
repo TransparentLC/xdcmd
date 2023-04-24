@@ -15,6 +15,8 @@
   * `xdcmd-windows-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
   * `xdcmd-windows-upx` 将打包产物使用 [UPX](https://upx.github.io/) 压缩后的版本，**不知道该下载哪个的话就选这个吧**。
 * ![Linux with glibc >= 2.35](https://img.shields.io/badge/Linux-glibc%20%3E=%202.35-fc0?logo=linux) 使用 GitHub Actions 自动打包成可执行文件，可以从[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载。
+  * 需要使用系统的包管理器安装 ImageMagick 和 glib2。
+    * 如果安装了 glib2 仍然出现 `OSError: libglib-2.0.so: cannot open shared object file: No such file or directory` 的错误而不能查看图片，你可能需要自己创建一个从 `libglib-2.0.so.0`（`find / -name libglib-2.0.so.0`）指向 `libglib-2.0.so` 的软链接（例如 `ln -s /usr/lib64/libglib-2.0.so.0 /usr/lib64/libglib-2.0.so`）。
   * 虽然名字里写的是 `ubuntu`（因为是在 Ubuntu 22.04 下打包的），但是 glibc 版本不低于 2.35 的 Linux 发行版应该都可以运行。
     * 测试过可以运行的发行版：
       * ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-333?logo=archlinux)
