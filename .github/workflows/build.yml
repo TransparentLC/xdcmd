@@ -116,10 +116,8 @@ jobs:
           rm -f main.dist/_dbm.so
           rm -f main.dist/_decimal.so
           rm -f main.dist/_elementtree.so
-          rm -f main.dist/_hashlib.so
           rm -f main.dist/_heapq.so
           rm -f main.dist/_lzma.so
-          rm -f main.dist/_multibytecodec.so
           rm -f main.dist/_multiprocessing.so
           rm -f main.dist/_opcode.so
           rm -f main.dist/_pickle.so
