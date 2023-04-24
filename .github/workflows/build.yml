@@ -69,7 +69,7 @@ jobs:
           path: main.dist
       - name: Build executable (onefile)
         run: |
-          nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd.exe main.py
+          nuitka --standalone --onefile --assume-yes-for-downloads --user-package-configuration-file=chafa.yml --output-filename=xdcmd.exe main.py
       - name: Upload result (onefile)
         uses: actions/upload-artifact@v3
         with:
@@ -162,7 +162,7 @@ jobs:
           path: xdcmd-ubuntu.tar.xz
       - name: Build executable (onefile)
         run: |
-          python3 -m nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd main.py
+          python3 -m nuitka --standalone --onefile --assume-yes-for-downloads --user-package-configuration-file=chafa.yml --output-filename=xdcmd main.py
           mkdir xdcmd-ubuntu-onefile
           mv xdcmd xdcmd-ubuntu-onefile/xdcmd
           chmod +x xdcmd-ubuntu-onefile/xdcmd
