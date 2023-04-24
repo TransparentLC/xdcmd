@@ -1,0 +1,9 @@
+- module-name: chafa
+  dlls:
+    - from_filenames:
+        relative_path: libs
+        prefixes:
+          - lib
+        suffixes:
+          - pyd
+      when: win32 and arch_amd64

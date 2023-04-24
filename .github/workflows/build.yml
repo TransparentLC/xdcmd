@@ -34,15 +34,17 @@ jobs:
       - name: Build executable
         run: |
           'COMMIT_HASH = "' + (git rev-parse HEAD) + '"' | Out-File -Encoding ascii xdnmb/version.py
-          nuitka --standalone --assume-yes-for-downloads main.py
+          nuitka --standalone --assume-yes-for-downloads --user-package-configuration-file=chafa.yml main.py
           mv main.dist/main.exe main.dist/xdcmd.exe
           rm main.dist/api-ms-win-*.dll
           rm main.dist/ucrtbase.dll
+          rm main.dist/_asyncio.pyd
           rm main.dist/_bz2.pyd
           rm main.dist/_decimal.pyd
           rm main.dist/_elementtree.pyd
           rm main.dist/_hashlib.pyd
           rm main.dist/_lzma.pyd
+          rm main.dist/_multiprocessing.pyd
           rm main.dist/_queue.pyd
           rm main.dist/_uuid.pyd
           cp README.md main.dist/README.md
