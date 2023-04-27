@@ -6,10 +6,14 @@
 
 用户反馈和技术支持集中串：[No.50750950](https://nmbxd.com/t/50750950)
 
-快速安装：
+![](https://user-images.githubusercontent.com/47057319/182030427-6c75ec92-f808-4cbc-8102-2c868db33093.png)
+
+## 快速安装
 
 * ![Arch Linux (Arch User Repository)](https://img.shields.io/badge/Arch%20Linux%20(Arch%20User%20Repository)-333?logo=archlinux) `yay -S xdao`
-  * 感谢饼干为“ygaCgTJ”的肥肥提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
+  * 感谢 Malingshu 提供[打包](https://aur.archlinux.org/packages/xdao)～(ノﾟ∀ﾟ)ノ
+* ![NixOS (Nix Flakes)](https://img.shields.io/badge/NixOS%20(Nix%20Flakes)-333?logo=nixos) `nix run github:Konecho/xdcmd`
+  * 感谢 Konecho 提供[打包](https://github.com/Konecho/xdcmd)～(ノﾟ∀ﾟ)ノ
 * ![Windows 10+](https://img.shields.io/badge/Windows-10+-06b?logo=windows) 使用 GitHub Actions 自动打包成可执行文件，可以从[这里](https://nightly.link/TransparentLC/xdcmd/workflows/build/master)下载。
   * `xdcmd-windows` 原始的打包产物。
   * `xdcmd-windows-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
@@ -29,8 +33,6 @@
       * ![RockyLinux 9](https://img.shields.io/badge/RockyLinux-9-1b8?logo=rockylinux)
   * `xdcmd-ubuntu` 原始的打包产物，**不知道该下载哪个的话就选这个吧**。
   * `xdcmd-ubuntu-onefile` 单文件版，实际上是在运行的时候将主程序什么的自解压到临时目录。
-
-![](https://user-images.githubusercontent.com/47057319/182030427-6c75ec92-f808-4cbc-8102-2c868db33093.png)
 
 ## 基本介绍
 
