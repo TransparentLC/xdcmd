@@ -1,5 +1,4 @@
 beautifulsoup4 == 4.*
-chafa.py == 1.*
 prompt-toolkit >= 3.0.30, < 4.*
 requests == 2.*
 wcwidth == 0.2.*

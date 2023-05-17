@@ -159,6 +159,7 @@ class Reply:
             self.imgThumb
             and xdnmb.globals.config['Config'].getboolean('ImagePreview')
             and not xdnmb.globals.config['Config'].getboolean('Monochrome')
+            and xdnmb.util.detectChafa()
         )
 
     # functools.cached_property在执行method和管理缓存时都需要锁

@@ -1,11 +1,11 @@
-import chafa
-import chafa.loader
+from __future__ import annotations
 import datetime
 import functools
 import gzip
 import os
 import re
 import secrets
+import subprocess
 import tempfile
 import time
 import typing
@@ -156,6 +156,31 @@ def focusToButton(focusFrom: xdnmb.model.ButtonType | None,
         pass
     return False
 
+
+# Chafa: Terminal Graphics for the 21st Century
+# https://hpjansson.org/chafa/
+
+
+@functools.cache
+def detectChafa() -> tuple[int, int, int] | None:
+    try:
+        p = subprocess.Popen(
+            ('chafa', '--version'),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        p.wait()
+        if p.returncode:
+            return None
+        else:
+            s = re.search(r'^Chafa version (\d+).(\d+).(\d+)$', p.stdout.readline().decode('utf-8'))
+            if s is None:
+                s = re.search(r'^Chafa version (\d+).(\d+).(\d+)$', p.stderr.readline().decode('utf-8'))
+            return (int(s.group(1)), int(s.group(2)), int(s.group(3)))
+    except FileNotFoundError:
+        return False
+
+
 @functools.lru_cache(256)
 def loadChafaImage(url: str, width: int, height: int) -> str:
     cacheKey = ':'.join((url, str(width), str(height)))
@@ -163,33 +188,44 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
     if cached:
         return gzip.decompress(cached).decode('utf-8')
 
+    # Reading image data from stdin raises "Failed to open '-': Unknown file format" error on Windows build · Issue #100 · hpjansson/chafa
+    # https://github.com/hpjansson/chafa/issues/100
+    # Fixed in Chafa 1.12.4
+    # https://github.com/hpjansson/chafa/releases/tag/1.12.4
+    useTemp: bool = os.name == 'nt' and detectChafa() < (1, 12, 4)
     temp = os.path.join(tempfile.gettempdir(), secrets.token_urlsafe(12))
-    with (
-        xdnmb.api.session.get(url, stream=True, timeout=3) as r,
-        open(temp, 'wb') as f
-    ):
-        for chunk in r.iter_content(8192):
-            f.write(chunk)
-
-    image = chafa.loader.Loader(temp)
-
-    config = chafa.CanvasConfig()
-    config.width = width
-    config.height = height
-    config.work_factor = 1
-    config.optimizations = (chafa.Optimizations.CHAFA_OPTIMIZATION_ALL,)
-    config.calc_canvas_geometry(image.width, image.height, .5)
-
-    canvas = chafa.Canvas(config)
-    canvas.draw_all_pixels(
-        image.pixel_type,
-        image.get_pixels(),
-        image.width, image.height,
-        image.rowstride,
+    cmd = (
+        'chafa',
+        '--duration',
+        str(0),
+        '--optimize',
+        str(9),
+        '--size',
+        f'{width}x{height}',
+        '--work',
+        str(9),
+        temp if useTemp else '-',
     )
-
-    result = canvas.print()
-
-    os.remove(temp)
-    lruCacheSet(cacheKey, gzip.compress(result, 9), 16384)
-    return result.decode()
+    with xdnmb.api.session.get(url, stream=True, timeout=3) as r:
+        if useTemp:
+            with open(temp, 'wb') as f:
+                for chunk in r.iter_content(8192):
+                    f.write(chunk)
+        with subprocess.Popen(
+            cmd,
+            stdin=subprocess.DEVNULL if useTemp else subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
+        ) as p:
+            if not useTemp:
+                for chunk in r.iter_content(8192):
+                    p.stdin.write(chunk)
+                p.stdin.close()
+            result = p.stdout.read()
+        if useTemp:
+            os.remove(temp)
+    if p.returncode:
+        raise subprocess.CalledProcessError(p.returncode, cmd)
+    result = re.split(r'\033\[\d*A', result.decode('utf-8'), 1)[0].replace('\r', '').strip()
+    lruCacheSet(cacheKey, gzip.compress(result.encode('utf-8'), 9), 16384)
+    return result
