@@ -1,4 +1,3 @@
-from __future__ import annotations
 import dataclasses
 import datetime
 import enum
@@ -120,11 +119,23 @@ class Reply:
 
     @functools.cached_property
     def references(self) -> tuple[int, ...]:
-        return tuple(int(x) for x in re.findall(r'>>No\.(\d+)', self.content))
+        # https://nmbxd.com/t/57491643
+        # 根据网页版，以下格式都属于引用：
+        # >50000001
+        # >>50000001
+        # >>No.50000001
+        # 发串的时候会去除每一行开头的空格
+        # 以>或＞开头的行按照4chan的规则也使用绿字
+        # 即使不在开头，以下使用全角符号的类似引用的格式也使用绿字但是又没有引用的弹窗，这里不当成引用来处理：
+        # ＞50000001
+        # ＞＞50000001
+        # ＞No.50000001
+        # ＞＞No.50000001
+        return tuple(int(x) for x in re.findall(r'(?:>{1,2}|>>No\.)(\d+)', self.content))
 
     @functools.cached_property
     def contentWithoutReferences(self) -> str:
-        return re.sub(r'>>No\.(\d+)\n?', '', self.content)
+        return re.sub(r'(?:>{1,2}|>>No\.)(\d+)\n?', '', self.content)
 
     @functools.lru_cache(8)
     def summary(self, length: int) -> str:
@@ -213,9 +224,10 @@ class Reply:
             )),
         ]
         children.append(Label(HTML(re.sub(
-            r'(&gt;&gt;No\.\d+)',
-            lambda m: f'<reference>{m.group(1)}</reference>',
+            r'(?:(?:&gt;){1,2}|&gt;&gt;No\.)\d+|^(?:&gt;|＞).+$',
+            lambda m: f'<reference>{m.group(0)}</reference>',
             html.escape(self.content),
+            0, re.M,
         ))))
         if self.img:
             try:
@@ -282,9 +294,10 @@ class Thread(Reply):
         if self.sage:
             children.append(Label('👎 SAGE', style='class:sage'))
         children.append(Label(HTML(re.sub(
-            r'(&gt;&gt;No\.\d+)',
-            lambda m: f'<reference>{m.group(1)}</reference>',
+            r'(?:(?:&gt;){1,2}|&gt;&gt;No\.)\d+|^(?:&gt;|＞).+$',
+            lambda m: f'<reference>{m.group(0)}</reference>',
             html.escape(self.content),
+            0, re.M,
         ))))
         if self.img:
             try:
