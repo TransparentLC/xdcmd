@@ -115,3 +115,4 @@ ignorenotice = False
 * 虽然本项目的开源性质决定了任何人都可以自由地使用、修改和分发本项目的源代码，但原作者个人仍然会强烈反对和谴责尝试将本项目的源代码用于适配“阿苇岛匿名版”的行为。
 * 加载过的缩略图缓存保存位置为 `$XDG_CACHE_HOME/xdcmd/lru-cache.db`，其中 `$XDG_CACHE_HOME` 的默认值为 `~/.cache`。
 * 如果你有兴趣的话，可以在 [Wiki](https://github.com/TransparentLC/xdcmd/wiki/%E8%87%AA%E5%B7%B1%E6%95%B4%E7%90%86%E7%9A%84-X-%E5%B2%9B%E5%8C%BF%E5%90%8D%E7%89%88-API-%E6%96%87%E6%A1%A3) 中查看原作者自己整理的 X 岛匿名版 API 文档。
+* 首页的 X 岛岛娘像素画由饼干为“QmMcrqS/oyf4Vgn/nhRG3Jo/F9YdaV2”的肥肥绘制（[No.57410809](https://nmbxd.com/t/57410809)）。[原版像素画](https://image.nmb.best/image/2023-05-13/645f9a2bcccac.png)大小为 32px，由于终端大小有限，因此这里重绘了一个 [16px 的版本](https://github.com/TransparentLC/xdcmd/assets/47057319/dd4b4b10-aa79-4056-8208-6d7154096538)。
