@@ -204,6 +204,8 @@ def loadChafaImage(url: str, width: int, height: int) -> str:
         f'{width}x{height}',
         '--work',
         str(9),
+        '--polite',
+        'on',
         temp if useTemp else '-',
     )
     with xdnmb.api.session.get(url, stream=True, timeout=3) as r:
