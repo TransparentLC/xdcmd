@@ -98,6 +98,7 @@ config['DEFAULT'] = {
     'Cookie': '',
     'FeedUUID': '',
     'Monochrome': False,
+    'Simplify': False,
     'ImagePreview': True,
     'ImagePreviewWidth': 24,
     'ImagePreviewHeight': 6,
@@ -626,34 +627,38 @@ forumContentControl = ScrollablePane(DynamicContainer(forumContentControlContain
 
 container = FloatContainer(
     HSplit((
-        Frame(DynamicContainer(titleControlContainer), style='class:content'),
+        *(() if config['Config'].getboolean('Simplify') else (
+            Frame(DynamicContainer(titleControlContainer), style='class:content'),
+        )),
         VSplit((
             forumGroupControl,
             Window(width=1, char='|', style='class:divide'),
             forumContentControl,
         )),
-        Window(height=1, char='-', style='class:divide'),
-        VSplit(tuple(
-            Label(text=HTML('<content-rev>[{0}]</content-rev>{1}').format(k, d), style='class:content')
-            for k, d in (
-                ('Alt+E', '退出'),
-                ('↑/↓', '选择版面/串'),
-                ('Enter', '查看版面/串'),
-                ('PgUp/PgDn', '翻页'),
-                ('Alt+P', '串内跳页'),
-                ('Alt+=/-', '添加/删除订阅'),
-            )
-        )),
-        VSplit(tuple(
-            Label(text=HTML('<content-rev>[{0}]</content-rev>{1}').format(k, d), style='class:content')
-            for k, d in (
-                ('Alt+Q', '从串返回版面'),
-                ('Alt+N', '发串/回复'),
-                ('Alt+M', '查看版规'),
-                ('Alt+L', '查看引用'),
-                ('Alt+K', '举报'),
-                ('Tab', '将光标指向版面/串/悬浮窗按钮'),
-            )
+        *(() if config['Config'].getboolean('Simplify') else (
+            Window(height=1, char='-', style='class:divide'),
+            VSplit(tuple(
+                Label(text=HTML('<content-rev>[{0}]</content-rev>{1}').format(k, d), style='class:content')
+                for k, d in (
+                    ('Alt+E', '退出'),
+                    ('↑/↓', '选择版面/串'),
+                    ('Enter', '查看版面/串'),
+                    ('PgUp/PgDn', '翻页'),
+                    ('Alt+P', '串内跳页'),
+                    ('Alt+=/-', '添加/删除订阅'),
+                )
+            )),
+            VSplit(tuple(
+                Label(text=HTML('<content-rev>[{0}]</content-rev>{1}').format(k, d), style='class:content')
+                for k, d in (
+                    ('Alt+Q', '从串返回版面'),
+                    ('Alt+N', '发串/回复'),
+                    ('Alt+M', '查看版规'),
+                    ('Alt+L', '查看引用'),
+                    ('Alt+K', '举报'),
+                    ('Tab', '将光标指向版面/串/悬浮窗按钮'),
+                )
+            )),
         )),
     )),
     [

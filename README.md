@@ -87,6 +87,9 @@ cookie = Y%85m%E5J5%F4%7D%98%DB%98%0Cm%08%11%9DV%1EIi%956W%10
 feeduuid = C7hswJmRY1eHo6FfCqJbmWgva8D3vAI6
 # 使用单色模式
 monochrome = False
+# 使用简化模式
+# 不显示上方的版面和串号以及下方的按键提示
+simplify = False
 # 显示缩略图
 # 此功能依赖于chafa（https://hpjansson.org/chafa/），需要自行使用包管理器安装，或下载可执行文件并放在PATH环境变量包含的路径下
 # 在单色模式下也不会显示缩略图
