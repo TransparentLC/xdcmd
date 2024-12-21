@@ -2,6 +2,7 @@ import argparse
 import configparser
 import functools
 import os
+import platform
 import re
 import sqlite3
 import sys
@@ -46,6 +47,8 @@ try:
     from xdnmb.version import COMMIT_HASH
 except ImportError:
     COMMIT_HASH = None
+
+is_mac = platform.system() == "Darwin"
 
 BASE_PATH: str = os.path.realpath(sys._MEIPASS if hasattr(sys, '_MEIPASS') else '')
 APP_PATH = os.path.dirname(os.path.realpath(sys.executable if hasattr(sys, '_MEIPASS') else sys.argv[0]))
@@ -640,22 +643,22 @@ container = FloatContainer(
             VSplit(tuple(
                 Label(text=HTML('<content-rev>[{0}]</content-rev>{1}').format(k, d), style='class:content')
                 for k, d in (
-                    ('Alt+E', '退出'),
-                    ('↑/↓', '选择版面/串'),
+                    ('Ctrl+E' if is_mac else 'Alt+E', '退出'),
+                    ('↑(k)/↓(j)', '选择版面/串'),
                     ('Enter', '查看版面/串'),
-                    ('PgUp/PgDn', '翻页'),
-                    ('Alt+P', '串内跳页'),
-                    ('Alt+=/-', '添加/删除订阅'),
+                    ('PgUp(h)/PgDn(l)', '翻页'),
+                    ('Ctrl+P' if is_mac else 'Alt+P', '串内跳页'),
+                    ('Ctrl+S/U' if is_mac else 'Alt+=/-', '添加/删除订阅'),
                 )
             )),
             VSplit(tuple(
                 Label(text=HTML('<content-rev>[{0}]</content-rev>{1}').format(k, d), style='class:content')
                 for k, d in (
-                    ('Alt+Q', '从串返回版面'),
-                    ('Alt+N', '发串/回复'),
-                    ('Alt+M', '查看版规'),
-                    ('Alt+L', '查看引用'),
-                    ('Alt+K', '举报'),
+                    ('Ctrl+Q' if is_mac else 'Alt+Q', '从串返回版面'),
+                    ('Ctrl+N' if is_mac else 'Alt+N', '发串/回复'),
+                    ('Ctrl+R' if is_mac else 'Alt+M', '查看版规'),
+                    ('Ctrl+L' if is_mac else 'Alt+L', '查看引用'),
+                    ('Ctrl+K' if is_mac else 'Alt+K', '举报'),
                     ('Tab', '将光标指向版面/串/悬浮窗按钮'),
                 )
             )),
@@ -672,14 +675,25 @@ container = FloatContainer(
 layout = Layout(container)
 
 keyBinding = KeyBindings()
-keyBinding.add('up', filter=Condition(lambda: not (len(container.floats) > 1 or showReplyForm)))(focus_previous)
-keyBinding.add('down', filter=Condition(lambda: not (len(container.floats) > 1 or showReplyForm)))(focus_next)
-keyBinding.add('escape', 'e')(lambda e: (
+
+condition = Condition(lambda: not (len(container.floats) > 1 or showReplyForm))
+@keyBinding.add('up', filter=condition)
+@keyBinding.add('k', filter=condition)
+def _(e):
+    focus_previous(e)
+
+@keyBinding.add('down', filter=condition)
+@keyBinding.add('j', filter=condition)
+def _(e):
+    focus_next(e)
+
+@ (keyBinding.add('c-e') if is_mac else keyBinding.add('escape', 'e'))
+def _(e): 
     LRU_CACHE_DB.close(),
     get_app().exit(),
-))
 
 @keyBinding.add('pageup')
+@keyBinding.add('h')
 def _(e: KeyPressEvent):
     if not forum:
         return
@@ -699,6 +713,7 @@ def _(e: KeyPressEvent):
         xdnmb.util.focusToButton(None, xdnmb.model.ButtonType.Forum)
     xdnmb.util.focusToButton(None, xdnmb.model.ButtonType.Forum)
 
+@keyBinding.add('l')
 @keyBinding.add('pagedown')
 def _(e: KeyPressEvent):
     if not forum:
@@ -714,10 +729,10 @@ def _(e: KeyPressEvent):
             return
         xdnmb.action.loadThread(thread, threadPage + 1)
 
-keyBinding.add('tab', filter=Condition(lambda: len(container.floats) > 1 or showReplyForm))(focus_next)
-keyBinding.add('s-tab', filter=Condition(lambda: len(container.floats) > 1 or showReplyForm))(focus_previous)
+keyBinding.add('tab', filter=condition)(focus_next)
+keyBinding.add('s-tab', filter=condition)(focus_previous)
 
-@keyBinding.add('tab', filter=Condition(lambda: not (len(container.floats) > 1 or showReplyForm)))
+@keyBinding.add('tab', filter=condition)
 def _(e: KeyPressEvent):
     for focusFrom, focusTo in (
         (xdnmb.model.ButtonType.Forum, xdnmb.model.ButtonType.Thread),
@@ -727,7 +742,8 @@ def _(e: KeyPressEvent):
         if xdnmb.util.focusToButton(focusFrom, focusTo):
             return
 
-@keyBinding.add('escape', 'm')
+# c-m represents enter
+@ (keyBinding.add('c-r') if is_mac else keyBinding.add('escape', 'm'))
 def _(e: KeyPressEvent):
     if not forum:
         return
@@ -736,7 +752,7 @@ def _(e: KeyPressEvent):
         thread.forum.notice if thread else forum.notice,
     )
 
-@keyBinding.add('escape', 'q')
+@ (keyBinding.add('c-q') if is_mac else keyBinding.add('escape', 'q'))
 def _(e: KeyPressEvent):
     global thread
     if not thread or len(container.floats) > 1 or showReplyForm:
@@ -745,7 +761,7 @@ def _(e: KeyPressEvent):
     forumContentControl.vertical_scroll = 0
     xdnmb.util.focusToButton(None, xdnmb.model.ButtonType.Forum)
 
-@keyBinding.add('escape', 'p')
+@ (keyBinding.add('c-p') if is_mac else keyBinding.add('escape', 'p'))
 def _(e: KeyPressEvent):
     if not thread:
         return
@@ -759,7 +775,7 @@ def _(e: KeyPressEvent):
         xdnmb.action.loadThread(thread, s)
     xdnmb.util.floatPrompt('跳转页面', f'请输入页数（共 {thread.maxPage} 页）：', callback)
 
-@keyBinding.add('escape', 'l')
+@ (keyBinding.add('c-l') if is_mac else keyBinding.add('escape', 'l'))
 def _(e: KeyPressEvent):
     @xdnmb.util.floatAlertExceptionCatch
     def callback(s: str):
@@ -805,7 +821,7 @@ def _(e: KeyPressEvent):
         WordCompleter(refw, meta_dict=refm),
     )
 
-@keyBinding.add('escape', 'n')
+@ (keyBinding.add('c-n') if is_mac else keyBinding.add('escape', 'n'))
 def _(e: KeyPressEvent):
     if (not forum or isinstance(forum, xdnmb.model.Timeline)) and not thread:
         return
@@ -831,7 +847,7 @@ def _(e: KeyPressEvent):
     else:
         xdnmb.util.focusToButton(None, xdnmb.model.ButtonType.Forum)
 
-@keyBinding.add('escape', 'k')
+@ (keyBinding.add('c-k') if is_mac else keyBinding.add('escape', 'k'))
 @xdnmb.util.floatAlertExceptionCatch
 def _(e: KeyPressEvent):
     if showReplyForm:
@@ -886,7 +902,8 @@ def _(e: KeyPressEvent):
         )),
     )
 
-@keyBinding.add('escape', '=')
+# Ctrl can't be used with =, so use c-s instead
+@ (keyBinding.add('c-s') if is_mac else keyBinding.add('escape', '='))
 @xdnmb.util.floatAlertExceptionCatch
 def _(e: KeyPressEvent):
     if not thread:
@@ -894,7 +911,7 @@ def _(e: KeyPressEvent):
     xdnmb.api.addFeed(thread)
     xdnmb.util.floatAlert('订阅', '订阅大成功→_→')
 
-@keyBinding.add('escape', '-')
+@ (keyBinding.add('c-u') if is_mac else keyBinding.add('escape', '-'))
 @xdnmb.util.floatAlertExceptionCatch
 def _(e: KeyPressEvent):
     if not thread:
