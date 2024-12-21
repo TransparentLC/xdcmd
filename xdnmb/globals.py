@@ -471,7 +471,7 @@ try:
 except:
     pass
 homepageLabel = Label(text=ANSI(homepageLabelText), align=WindowAlign.CENTER)
-forumBottomButton = Button('按 PgUp/PgDn 翻页')
+forumBottomButton = Button('按 PgUp(h)/PgDn(l) 翻页')
 
 @xdnmb.util.floatAlertExceptionCatch
 def postThread():

@@ -168,3 +168,107 @@ jobs:
           if-no-files-found: error
           name: xdcmd-ubuntu-onefile
           path: xdcmd-ubuntu-onefile.tar.xz
+  build-macos-arm64:
+    runs-on: macos-latest
+    env:
+      PYTHONIOENCODING: utf-8
+      PYTHONOPTIMIZE: 1
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Cache nuitka dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/xdcmd
+          key: macos-arm64-nuitka
+      - name: Install pip dependencies
+        run: |
+          pip install -U -r requirements.txt
+          pip install -U nuitka zstandard ordered-set
+          brew install patchelf ccache
+      - name: Build executable
+        run: |
+          echo COMMIT_HASH = \"$(git rev-parse HEAD)\" > xdnmb/version.py
+          python3 -m nuitka --standalone --assume-yes-for-downloads main.py
+          mv main.dist/main.bin main.dist/xdcmd
+          chmod +x main.dist/xdcmd
+          cp README.md main.dist/README.md
+          mv main.dist xdcmd-macos-arm64
+          XZ_OPT=-9e tar Jcf xdcmd-macos-arm64.tar.xz xdcmd-arm64
+      - name: Upload result
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xdcmd-macos-arm64
+          path: xdcmd-macos-arm64.tar.xz
+      - name: Build executable (onefile)
+        run: |
+          python3 -m nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd main.py
+          mkdir xdcmd-macos-arm64-onefile
+          mv xdcmd xdcmd-macos-arm64-onefile/xdcmd
+          chmod +x xdcmd-macos-arm64-onefile/xdcmd
+          cp README.md xdcmd-macos-arm64-onefile/README.md
+          XZ_OPT=-9e tar Jcf xdcmd-macos-arm64-onefile.tar.xz xdcmd-macos-arm64-onefile
+      - name: Upload result (onefile)
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xdcmd-macos-arm64-onefile
+          path: xdcmd-macos-arm64-onefile.tar.xz
+  build-macos-x86:
+    runs-on: macos-13
+    env:
+      PYTHONIOENCODING: utf-8
+      PYTHONOPTIMIZE: 1
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Cache nuitka dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/xdcmd
+          key: macos-x86-nuitka
+      - name: Install pip dependencies
+        run: |
+          pip install -U -r requirements.txt
+          pip install -U nuitka zstandard ordered-set
+          brew install patchelf ccache
+      - name: Build executable
+        run: |
+          echo COMMIT_HASH = \"$(git rev-parse HEAD)\" > xdnmb/version.py
+          python3 -m nuitka --standalone --assume-yes-for-downloads main.py
+          mv main.dist/main.bin main.dist/xdcmd
+          chmod +x main.dist/xdcmd
+          cp README.md main.dist/README.md
+          mv main.dist xdcmd-macos-x86
+          XZ_OPT=-9e tar Jcf xdcmd-macos-x86.tar.xz xdcmd-x86
+      - name: Upload result
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xdcmd-macos-x86
+          path: xdcmd-macos-x86.tar.xz
+      - name: Build executable (onefile)
+        run: |
+          python3 -m nuitka --standalone --onefile --assume-yes-for-downloads --output-filename=xdcmd main.py
+          mkdir xdcmd-macos-x86-onefile
+          mv xdcmd xdcmd-macos-x86-onefile/xdcmd
+          chmod +x xdcmd-macos-x86-onefile/xdcmd
+          cp README.md xdcmd-macos-x86-onefile/README.md
+          XZ_OPT=-9e tar Jcf xdcmd-macos-x86-onefile.tar.xz xdcmd-macos-x86-onefile
+      - name: Upload result (onefile)
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xdcmd-macos-x86-onefile
+          path: xdcmd-macos-x86-onefile.tar.xz
