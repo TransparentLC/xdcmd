@@ -199,7 +199,7 @@ jobs:
           chmod +x main.dist/xdcmd
           cp README.md main.dist/README.md
           mv main.dist xdcmd-macos-arm64
-          XZ_OPT=-9e tar Jcf xdcmd-macos-arm64.tar.xz xdcmd-arm64
+          XZ_OPT=-9e tar Jcf xdcmd-macos-arm64.tar.xz xdcmd-macos-arm64
       - name: Upload result
         uses: actions/upload-artifact@v3
         with:
@@ -251,7 +251,7 @@ jobs:
           chmod +x main.dist/xdcmd
           cp README.md main.dist/README.md
           mv main.dist xdcmd-macos-x86
-          XZ_OPT=-9e tar Jcf xdcmd-macos-x86.tar.xz xdcmd-x86
+          XZ_OPT=-9e tar Jcf xdcmd-macos-x86.tar.xz xdcmd-macos-x86
       - name: Upload result
         uses: actions/upload-artifact@v3
         with:
