@@ -729,8 +729,8 @@ def _(e: KeyPressEvent):
             return
         xdnmb.action.loadThread(thread, threadPage + 1)
 
-keyBinding.add('tab', filter=condition)(focus_next)
-keyBinding.add('s-tab', filter=condition)(focus_previous)
+keyBinding.add('tab', filter=Condition(lambda: not condition()))(focus_next)
+keyBinding.add('s-tab', filter=Condition(lambda: not condition()))(focus_previous)
 
 @keyBinding.add('tab', filter=condition)
 def _(e: KeyPressEvent):
