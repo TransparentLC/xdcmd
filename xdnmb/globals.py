@@ -693,7 +693,7 @@ def _(e):
     get_app().exit(),
 
 @keyBinding.add('pageup')
-@keyBinding.add('h')
+@keyBinding.add('h', filter=condition)
 def _(e: KeyPressEvent):
     if not forum:
         return
@@ -713,8 +713,8 @@ def _(e: KeyPressEvent):
         xdnmb.util.focusToButton(None, xdnmb.model.ButtonType.Forum)
     xdnmb.util.focusToButton(None, xdnmb.model.ButtonType.Forum)
 
-@keyBinding.add('l')
 @keyBinding.add('pagedown')
+@keyBinding.add('l', filter=condition)
 def _(e: KeyPressEvent):
     if not forum:
         return
